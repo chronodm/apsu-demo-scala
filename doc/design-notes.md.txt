@@ -1,0 +1,214 @@
+﻿# Apsu: Design notes
+
+## Case study: Asteroids
+
+### Systems
+
+#### Movement
+
+- inputs
+    - an entity with a position and one or more velocity components
+
+- logic
+    - sum the velocity components
+
+- outputs
+    - a position update for the entity
+
+------------------------------------------------------------
+
+#### Collision
+
+- inputs
+    - all entities with bounding boxes
+
+- logic
+    - determine which entities collide
+
+- outputs
+    - collision components joining each pair of colliding entities
+
+------------------------------------------------------------
+
+#### Game loop
+
+- inputs
+    - all systems [each modeled as an entity + a component?]
+    - a sorting rule (or explicit order) for all systems [modeled as an entity + a component?]
+
+- logic
+    - iterate over all systems in order
+
+- outputs
+    - invoke each system
+
+- notes
+    - let systems decide whether or not to run
+
+------------------------------------------------------------
+
+#### Gunnery
+
+- inputs
+    - for each entity with weapon-ness, a fire command, and a platform
+    - the entity that is the weapon’s platform, its position and momentum
+
+- logic
+    - determine the position and velocity of the bullet
+
+- outputs
+    - remove the fire command
+    - create the bullet entity, with bullet-ness, orientation, position, and velocity components
+
+- notes
+    - armament component joins a weapon entity and a platform entity?
+
+------------------------------------------------------------
+
+#### RCS
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Drive
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Bullet/asteroid collision
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Ship/asteroid collision
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Asteroid destruction
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Scoring
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Player lives
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Game start
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Game over
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Level start
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Level end
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### High score
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Rendering
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Input handling
+
+- inputs
+
+- logic
+
+- outputs
+
+------------------------------------------------------------
+
+#### Input distribution
+
+- inputs
+
+- logic
+
+- outputs
