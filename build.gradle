@@ -49,7 +49,8 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
 
-task test(overwrite: true, dependsOn: testClasses) << {
+task {
+  jvmArgs '-XX:MaxPermSize=512m'
   ant.taskdef(name: 'scalatest',
       classname: 'org.scalatest.tools.ScalaTestAntTask',
       classpath: sourceSets.test.runtimeClasspath.asPath
