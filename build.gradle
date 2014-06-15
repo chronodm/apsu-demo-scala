@@ -30,6 +30,11 @@ repositories {
 dependencies {
 
     // ------------------------------------------------------------
+    // Apsu
+
+    compile 'apsu:apsu-core-scala:1.0-SNAPSHOT'
+
+    // ------------------------------------------------------------
     // Platform
 
     compile "org.scala-lang:scala-library:${scalaVersion}"
