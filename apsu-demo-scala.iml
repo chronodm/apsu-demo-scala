@@ -25,7 +25,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: apsu-core-scala-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="apsu-core" />
     <orderEntry type="library" exported="" name="Gradle: scala-library-2.10.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: scala-reflect-2.10.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: log4j-1.2.17" level="project" />

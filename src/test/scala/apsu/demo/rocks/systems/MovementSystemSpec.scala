@@ -71,4 +71,12 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers with MockitoSuga
     f.mgr.get[Position](e).get should === (expected)
   }
 
+  it should "ignore anomalous entities with velocity but no position" in { f =>
+    val e = f.mgr.newEntity()
+    val v = Velocity(2, 3)
+    f.mgr.set(e, v)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](e) should be(None)
+  }
 }
