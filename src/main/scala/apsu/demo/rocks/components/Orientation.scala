@@ -7,24 +7,60 @@ import org.apache.commons.math3.util.MathUtils
  *
  * @author david
  */
-sealed trait Orientation {
-  def theta: Double
+class Orientation private(val theta: Double) {
+    def +(dTheta: Double): Orientation = {
+      Orientation.apply(theta + dTheta)
+    }
 
-  def +(dTheta: Double): Orientation = {
-    Orientation(theta + dTheta)
+    def -(dTheta: Double): Orientation = {
+      Orientation.apply(theta - dTheta)
+    }
+
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Orientation]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Orientation =>
+      (that canEqual this) &&
+        theta == that.theta
+    case _ => false
   }
 
-  def -(dTheta: Double): Orientation = {
-    Orientation(theta - dTheta)
+  override def hashCode(): Int = {
+    val state = Seq(theta)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }
 
 object Orientation {
   def apply(t: Double): Orientation = {
     val theta = MathUtils.normalizeAngle(t, 0)
-    OrientationImpl(theta)
+    new Orientation(theta)
   }
 
-  private case class OrientationImpl(theta: Double) extends Orientation
-
+  def unapply(a: Orientation): Option[Double] = {
+    Some(a.theta)
+  }
 }
+
+//sealed trait Orientation {
+//  def theta: Double
+//
+//  def +(dTheta: Double): Orientation = {
+//    Orientation(theta + dTheta)
+//  }
+//
+//  def -(dTheta: Double): Orientation = {
+//    Orientation(theta - dTheta)
+//  }
+//}
+//
+//object Orientation {
+//  def apply(t: Double): Orientation = {
+//    val theta = MathUtils.normalizeAngle(t, 0)
+//    OrientationImpl(theta)
+//  }
+//
+//  private case class OrientationImpl(theta: Double) extends Orientation
+//
+//}

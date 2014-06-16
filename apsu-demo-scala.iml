@@ -43,6 +43,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: asm-util-3.3.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: asm-analysis-3.3.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: parboiled-java-1.0.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: apsu-core-scala-1.0-SNAPSHOT" level="project" />
   </component>
 </module>
 
