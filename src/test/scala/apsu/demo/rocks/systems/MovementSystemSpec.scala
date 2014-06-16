@@ -1,40 +1,21 @@
 package apsu.demo.rocks.systems
 
 import org.scalatest.{fixture, Matchers}
-import org.scalatest.mock.MockitoSugar
 import apsu.core.{MapEntityManager, EntityManager}
 import apsu.demo.rocks.components.{Position, Velocity}
 import java.util.concurrent.TimeUnit
-import org.scalautils.Equality
-import java.math.MathContext
+import apsu.demo.testutils.PositionEquality
 
 /**
  * MovementSystemSpec
  *
  * @author david
  */
-class MovementSystemSpec extends fixture.FlatSpec with Matchers with MockitoSugar {
+class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
   case class F(mgr: EntityManager, sys: MovementSystem)
 
-  /** Check position equality to 3 significant digits */
-  implicit val positionEq = new Equality[Position] {
-
-    private def closeEnough(d1: Double, d2: Double): Boolean = {
-      val mc = new MathContext(3)
-      val bd1 = BigDecimal(d1).round(mc)
-      val bd2 = BigDecimal(d2).round(mc)
-      bd1 == bd2
-    }
-
-    override def areEqual(p1: Position, a: Any): Boolean = {
-      a match {
-        case p2: Position =>
-          closeEnough(p1.x, p2.x) && closeEnough(p1.y, p2.y)
-        case _ => false
-      }
-    }
-  }
+  implicit val positionEq = new PositionEquality
 
   type FixtureParam = F
 

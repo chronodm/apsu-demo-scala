@@ -16,6 +16,11 @@ class RotationSystem(mgr: EntityManager) extends System {
     mgr.all[AngularVelocity].foreach[Unit]({ case (e, w) =>
         mgr.get[Orientation](e) match {
           case Some(o0) =>
+            val deltaSeconds = deltaMicros * secondsPerMicro
+            val dTheta = deltaSeconds * w.theta
+            val o1 = o0 + dTheta
+            mgr.set(e, o1)
+          case _ =>
         }
     })
   }
