@@ -2,7 +2,7 @@ package apsu.demo.rocks.systems
 
 import org.scalatest.{fixture, Matchers}
 import apsu.core.{MapEntityManager, EntityManager}
-import apsu.demo.rocks.components.{Screen, Position, Velocity}
+import apsu.demo.rocks.components.{World, Position, Velocity}
 import java.util.concurrent.TimeUnit
 import apsu.demo.testutils.PositionEquality
 
@@ -63,7 +63,7 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
   it should "wrap north to south" in { f =>
     val screenEntity = f.mgr.newEntity()
-    val screen = Screen(16, 9)
+    val screen = World(16, 9)
     f.mgr.set(screenEntity, screen)
 
     val mobEntity = f.mgr.newEntity()
@@ -80,7 +80,7 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
   it should "wrap south to north" in { f =>
     val screenEntity = f.mgr.newEntity()
-    val screen = Screen(16, 9)
+    val screen = World(16, 9)
     f.mgr.set(screenEntity, screen)
 
     val mobEntity = f.mgr.newEntity()
@@ -97,7 +97,7 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
   it should "wrap east to west" in { f =>
     val screenEntity = f.mgr.newEntity()
-    val screen = Screen(16, 9)
+    val screen = World(16, 9)
     f.mgr.set(screenEntity, screen)
 
     val mobEntity = f.mgr.newEntity()
@@ -114,7 +114,7 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
   it should "wrap west to east" in { f =>
     val screenEntity = f.mgr.newEntity()
-    val screen = Screen(16, 9)
+    val screen = World(16, 9)
     f.mgr.set(screenEntity, screen)
 
     val mobEntity = f.mgr.newEntity()
@@ -127,5 +127,9 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
     f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
     f.mgr.get[Position](mobEntity).get should === (expected)
+  }
+
+  it should "wrap values larger than screen height or width" in { f =>
+    fail("test not implemented")
   }
 }

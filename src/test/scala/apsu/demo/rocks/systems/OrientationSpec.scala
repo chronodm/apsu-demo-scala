@@ -57,7 +57,7 @@ class OrientationSpec extends FlatSpec with Matchers {
     // values the normalized angle will be off in like the 15th
     // decimal place.
 
-    // TODO: consider snapping to some fraction of a circle
+    // TODO: consider snapping to some fraction of a circle cf. http://docs.oracle.com/javase/7/docs/api/java/awt/geom/AffineTransform.html
 
     val o0 = Orientation(Math.PI / 4)
     val o1 = Orientation(2 * Math.PI + Math.PI / 4)
@@ -81,7 +81,7 @@ class OrientationSpec extends FlatSpec with Matchers {
     // values the normalized angle will be off in like the 15th
     // decimal place.
 
-    // TODO: consider snapping to some fraction of a circle
+    // TODO: consider snapping to some fraction of a circle cf. http://docs.oracle.com/javase/7/docs/api/java/awt/geom/AffineTransform.html
 
     val o0 = Orientation(Math.PI / 4)
     val o1 = Orientation(2 * Math.PI + Math.PI / 4)
