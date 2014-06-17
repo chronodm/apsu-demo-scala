@@ -70,3 +70,7 @@ compileScala {
             "-language:postfixOps"
     ]
 }
+
+test {
+    maxParallelForks = 1
+}
