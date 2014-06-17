@@ -2,7 +2,7 @@ package apsu.demo.rocks.systems
 
 import org.scalatest.{fixture, Matchers}
 import apsu.core.{MapEntityManager, EntityManager}
-import apsu.demo.rocks.components.{Position, Velocity}
+import apsu.demo.rocks.components.{Screen, Position, Velocity}
 import java.util.concurrent.TimeUnit
 import apsu.demo.testutils.PositionEquality
 
@@ -59,5 +59,73 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
 
     f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
     f.mgr.get[Position](e) should be(None)
+  }
+
+  it should "wrap north to south" in { f =>
+    val screenEntity = f.mgr.newEntity()
+    val screen = Screen(16, 9)
+    f.mgr.set(screenEntity, screen)
+
+    val mobEntity = f.mgr.newEntity()
+    val p = Position(8, 1)
+    val v = Velocity(2, -2)
+    f.mgr.set(mobEntity, p)
+    f.mgr.set(mobEntity, v)
+
+    val expected = Position(10, 8)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](mobEntity).get should === (expected)
+  }
+
+  it should "wrap south to north" in { f =>
+    val screenEntity = f.mgr.newEntity()
+    val screen = Screen(16, 9)
+    f.mgr.set(screenEntity, screen)
+
+    val mobEntity = f.mgr.newEntity()
+    val p = Position(8, 8)
+    val v = Velocity(2, 2)
+    f.mgr.set(mobEntity, p)
+    f.mgr.set(mobEntity, v)
+
+    val expected = Position(10, 1)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](mobEntity).get should === (expected)
+  }
+
+  it should "wrap east to west" in { f =>
+    val screenEntity = f.mgr.newEntity()
+    val screen = Screen(16, 9)
+    f.mgr.set(screenEntity, screen)
+
+    val mobEntity = f.mgr.newEntity()
+    val p = Position(15, 4)
+    val v = Velocity(2, 2)
+    f.mgr.set(mobEntity, p)
+    f.mgr.set(mobEntity, v)
+
+    val expected = Position(1, 6)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](mobEntity).get should === (expected)
+  }
+
+  it should "wrap west to east" in { f =>
+    val screenEntity = f.mgr.newEntity()
+    val screen = Screen(16, 9)
+    f.mgr.set(screenEntity, screen)
+
+    val mobEntity = f.mgr.newEntity()
+    val p = Position(1, 4)
+    val v = Velocity(-2, 2)
+    f.mgr.set(mobEntity, p)
+    f.mgr.set(mobEntity, v)
+
+    val expected = Position(15, 6)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](mobEntity).get should === (expected)
   }
 }

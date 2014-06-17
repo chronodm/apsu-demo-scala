@@ -42,25 +42,3 @@ object Orientation {
     Some(a.theta)
   }
 }
-
-//sealed trait Orientation {
-//  def theta: Double
-//
-//  def +(dTheta: Double): Orientation = {
-//    Orientation(theta + dTheta)
-//  }
-//
-//  def -(dTheta: Double): Orientation = {
-//    Orientation(theta - dTheta)
-//  }
-//}
-//
-//object Orientation {
-//  def apply(t: Double): Orientation = {
-//    val theta = MathUtils.normalizeAngle(t, 0)
-//    OrientationImpl(theta)
-//  }
-//
-//  private case class OrientationImpl(theta: Double) extends Orientation
-//
-//}
