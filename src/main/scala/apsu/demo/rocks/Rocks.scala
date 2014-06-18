@@ -16,12 +16,12 @@ import org.apache.log4j.Logger
  *
  * @author david
  */
-class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
+class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Unit) {
 
   // ------------------------------------------------------
   // Constants
 
-  val updatesPerSecond = 30
+  val updatesPerSecond = 60
   val skipNanos = TimeUnit.SECONDS.toNanos(1) / updatesPerSecond
   val maxFrameskip = 10
 
@@ -65,15 +65,14 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
   }
 
   def update(deltaMicros: Long) {
-    log.debug(s"Update at ${System.nanoTime()}, $deltaMicros us, (${1e6 / deltaMicros} FPS)")
     levelSystem.processTick(deltaMicros)
     movementSystem.processTick(deltaMicros)
     rotationSystem.processTick(deltaMicros)
   }
 
-  def render() {
+  def render(lastDelta: Long) {
     log.debug(s"render() at ${System.nanoTime()}")
-    renderingSystem.processTick(0)
+    renderingSystem.processTick(lastDelta)
   }
 
   def start() {
@@ -84,11 +83,14 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
 
     var lastRender = lastUpdate
 
+    var lastDelta = 0L
+
     while (running) {
       var loops = 0
       while (System.nanoTime() > nextUpdate && loops < maxFrameskip) {
         val now: Long = System.nanoTime()
         val deltaMicros = TimeUnit.NANOSECONDS.toMicros(now - lastUpdate)
+        lastDelta = deltaMicros
         lastUpdate = now
         update(deltaMicros)
         nextUpdate += skipNanos
@@ -97,7 +99,7 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
 
       // TODO move 'when to render' smarts into RenderingSystem & just treat as another system
       // TODO interpolation
-      render()
+      render(lastDelta)
 
       val now = System.nanoTime()
       log.debug(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
@@ -116,32 +118,25 @@ object Rocks {
     f.setResizable(false)
     f.pack()
 
-    f.setSize(640, 480)
-    f.setLocationByPlatform(true)
-    f.setVisible(true)
-
-//    f.setUndecorated(true)
-//    val env = GraphicsEnvironment.getLocalGraphicsEnvironment
-//    val dev = env.getDefaultScreenDevice
-//    dev.setFullScreenWindow(f)
+    val env = GraphicsEnvironment.getLocalGraphicsEnvironment
+    val dev = env.getDefaultScreenDevice
+    dev.setFullScreenWindow(f)
 
     f.createBufferStrategy(2)
     val bufferStrategy = f.getBufferStrategy
 
-    val bounds: Rectangle = f.getBounds
-
-    def doPaint(p: (Graphics2D) => Unit) = {
+    def doPaint(p: (Graphics2D, Rectangle) => Unit) = {
       val g2 = bufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D]
       try {
-        g2.clearRect(0, 0, bounds.width, bounds.height)
-        p(g2)
+        g2.clearRect(0, 0, f.getBounds.width, f.getBounds.height)
+        p(g2, f.getBounds)
       } finally {
         g2.dispose()
       }
       bufferStrategy.show()
     }
 
-    val rocks = new Rocks(bounds, doPaint)
+    val rocks = new Rocks(f.getBounds, doPaint)
 
     def quit() = {
       rocks.stop()

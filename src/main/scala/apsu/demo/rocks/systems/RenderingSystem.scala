@@ -1,7 +1,7 @@
 package apsu.demo.rocks.systems
 
 import apsu.core.{EntityManager, System}
-import java.awt.Graphics2D
+import java.awt.{Rectangle, Graphics2D}
 import apsu.demo.rocks.components.{Orientation, Position, Renderable}
 import org.apache.log4j.Logger
 import java.awt.geom.AffineTransform
@@ -11,15 +11,18 @@ import java.awt.geom.AffineTransform
  *
  * @author david
  */
-class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D) => Unit) => Unit) extends System {
+class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D, Rectangle) => Unit) => Unit) extends System {
 
   private val log = Logger.getLogger(classOf[RenderingSystem])
 
   override def nickname: String = "Rendering"
 
-  override def processTick(deltaMicros: Long): Unit = {
+  override def processTick(lastDelta: Long): Unit = {
     doPaint({
-      g2 =>
+      (g2, bounds) =>
+        val frameRate = "%1.0f" format (1e6 / lastDelta)
+        g2.drawString(s"$frameRate FPS", 0f, bounds.height)
+
         mgr.all[Renderable].foreach({
           case (e, r) =>
             val img = r.img
