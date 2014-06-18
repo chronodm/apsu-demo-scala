@@ -111,6 +111,7 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
 }
 
 object Rocks {
+  private val menuKeyMask = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
 
   def main(args: Array[String]) {
     val f = new Frame()
@@ -121,6 +122,11 @@ object Rocks {
     val env = GraphicsEnvironment.getLocalGraphicsEnvironment
     val dev = env.getDefaultScreenDevice
     dev.setFullScreenWindow(f)
+
+    // Keyboard focus hack; see http://stackoverflow.com/questions/13064607/fullscreen-swing-components-fail-to-receive-keyboard-input-on-java-7-on-mac-os-x
+    f.setVisible(false)
+    f.setVisible(true)
+
 
     def imageCaps = new ImageCapabilities(true)
     f.createBufferStrategy(2, new BufferCapabilities(imageCaps, imageCaps, FlipContents.BACKGROUND))
@@ -139,6 +145,27 @@ object Rocks {
     }
 
     val rocks = new Rocks(f.getBounds, doPaint)
+
+    def quit() = {
+      rocks.stop()
+      System.exit(0)
+    }
+
+    // TODO why doesn't this work?
+    KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(
+      new KeyEventDispatcher {
+        override def dispatchKeyEvent(e: KeyEvent): Boolean = {
+          if (e.getID == KeyEvent.KEY_RELEASED) {
+            e.getKeyCode match {
+              case KeyEvent.VK_Q if (e.getModifiers & menuKeyMask) != 0  => quit()
+              case KeyEvent.VK_ESCAPE => quit()
+              case _ =>
+            }
+          }
+          false
+        }
+      }
+    )
 
     rocks.start()
   }
