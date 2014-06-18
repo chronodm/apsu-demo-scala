@@ -16,8 +16,12 @@ case class Velocity(x: Double, y: Double) {
     Velocity(x - that.x, y - that.y)
   }
 
-  def length: Double = {
+  lazy val magnitude: Double = {
     Math.sqrt(x*x + y*y)
+  }
+
+  lazy val theta: Double = {
+    Math.atan2(y, x)
   }
 
   override def toString: String = s"<$x, $y>"

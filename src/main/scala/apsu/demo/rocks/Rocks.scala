@@ -59,7 +59,8 @@ class Rocks(mainWindow: MainWindow) {
     keyboardInputSystem,
     new CommandSystem(mgr),
     new MovementSystem(mgr),
-    new RotationSystem(mgr)
+    new RotationSystem(mgr),
+    new FrictionSystem(mgr)
   )
 
   // ------------------------------------------------------

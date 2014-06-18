@@ -4,8 +4,14 @@ import apsu.core.{EntityManager, System}
 import apsu.demo.rocks.components._
 import scala.Some
 import java.util.Random
-import apsu.demo.rocks.components.geometry.{Orientation, AngularVelocity, Velocity, Position}
+import apsu.demo.rocks.components.geometry._
 import apsu.demo.rocks.components.rendering.{World, Renderable}
+import apsu.demo.rocks.components.PlayerShip
+import apsu.demo.rocks.components.geometry.Position
+import apsu.demo.rocks.components.rendering.World
+import apsu.demo.rocks.components.rendering.Renderable
+import scala.Some
+import apsu.demo.rocks.components.geometry.AngularVelocity
 
 /**
  * LevelSystem
@@ -52,6 +58,7 @@ class LevelSystem(mgr: EntityManager) extends System  {
         mgr.set(shipEntity, Position(w.width / 2, w.height / 2))
         mgr.set(shipEntity, Orientation(-0.5 * Math.PI))
         mgr.set(shipEntity, shipRenderable)
+        mgr.set(shipEntity, Friction(0.99))
       case _ => // TODO clean up all these "case _ =>" s
     }
   }

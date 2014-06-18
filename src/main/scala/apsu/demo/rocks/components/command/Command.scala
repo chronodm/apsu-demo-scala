@@ -19,6 +19,9 @@ object Command {
   // Commands
 
   val accelerate = Command("accelerate")
+  val rotateClockwise = Command("rotateClockwise")
+  val rotateCounterclockwise = Command("rotateCounterclockwise")
+
   val exit = Command("exit")
 
   // ------------------------------------------------------------
@@ -26,10 +29,16 @@ object Command {
 
   def apply(e: KeyEvent): Option[Command] = {
     val cmd = e.getKeyCode match {
-
       // TODO some sort of registry
+
       case KeyEvent.VK_W => Some(accelerate)
       case KeyEvent.VK_UP => Some(accelerate)
+
+      case KeyEvent.VK_A => Some(rotateCounterclockwise)
+      case KeyEvent.VK_LEFT => Some(rotateCounterclockwise)
+
+      case KeyEvent.VK_D => Some(rotateClockwise)
+      case KeyEvent.VK_RIGHT => Some(rotateClockwise)
 
       case KeyEvent.VK_ESCAPE => Some(exit)
 
