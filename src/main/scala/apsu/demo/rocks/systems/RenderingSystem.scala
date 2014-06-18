@@ -17,8 +17,6 @@ class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D) => Unit) => Uni
 
   override def nickname: String = "Rendering"
 
-  // TODO clean up all these "case _ =>" s
-
   override def processTick(deltaMicros: Long): Unit = {
     doPaint({
       g2 =>
@@ -40,7 +38,7 @@ class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D) => Unit) => Uni
                 g2.drawImage(img, tx, null)
 
                 log.debug(s"Rendered ${mgr.getNickname(e).getOrElse("")} at ${p} with ${o}")
-              case _ =>
+              case _ => // TODO clean up all these "case _ =>" s
             }
         })
     })

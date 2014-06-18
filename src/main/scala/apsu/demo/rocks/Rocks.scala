@@ -6,7 +6,7 @@ import javax.swing.JComponent
 import java.awt.event.KeyEvent
 import java.awt._
 import apsu.demo.rocks.components._
-import apsu.demo.rocks.systems.{RotationSystem, MovementSystem, RenderingSystem}
+import apsu.demo.rocks.systems.{LevelSystem, RotationSystem, MovementSystem, RenderingSystem}
 import apsu.demo.rocks.components.Position
 import apsu.demo.rocks.components.World
 import org.apache.log4j.Logger
@@ -42,16 +42,13 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
   val world = mgr.newEntity("World")
   mgr.set(world, new World(bounds.width, bounds.height))
 
-  val rock = mgr.newEntity("Rock")
-  mgr.set(rock, Renderable(96, 96, "/sprites/rock/rock-lg-384-n.png"))
-  mgr.set(rock, Position(bounds.getWidth / 2, bounds.getHeight / 2))
-  mgr.set(rock, Orientation(0))
-  mgr.set(rock, Velocity(-50, 75))
-  mgr.set(rock, AngularVelocity(1))
+  val state = mgr.newEntity("State")
+  mgr.set(state, GameState.init)
 
   // ------------------------------------------------------
   // Systems
 
+  private val levelSystem = new LevelSystem(mgr)
   private val movementSystem = new MovementSystem(mgr)
   private val rotationSystem = new RotationSystem(mgr)
   private val renderingSystem = new RenderingSystem(mgr, doPaint)
@@ -69,6 +66,7 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
 
   def update(deltaMicros: Long) {
     log.debug(s"Update at ${System.nanoTime()}, $deltaMicros us, (${1e6 / deltaMicros} FPS)")
+    levelSystem.processTick(deltaMicros)
     movementSystem.processTick(deltaMicros)
     rotationSystem.processTick(deltaMicros)
   }
@@ -104,21 +102,6 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D) => Unit) => Unit) {
       val now = System.nanoTime()
       log.debug(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
       lastRender = System.nanoTime()
-
-//      var now = System.nanoTime()
-//      var nextUpdate = now
-//      var lastUpdate = now
-//
-//      for (i <- 0 until maxFrameskip if now < nextUpdate) {
-//        val deltaMicros = TimeUnit.NANOSECONDS.toMicros(now - lastUpdate)
-//        update(deltaMicros)
-//        lastUpdate = now
-//        nextUpdate += skipNanos
-//        now = System.nanoTime()
-//      }
-//
-//      // TODO move 'when to render' smarts into RenderingSystem & just treat as another system
-//      render()
     }
 
   }
