@@ -10,6 +10,7 @@ import apsu.demo.rocks.systems.{LevelSystem, RotationSystem, MovementSystem, Ren
 import apsu.demo.rocks.components.Position
 import apsu.demo.rocks.components.World
 import org.apache.log4j.Logger
+import java.awt.BufferCapabilities.FlipContents
 
 /**
  * Rocks
@@ -110,7 +111,6 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
 }
 
 object Rocks {
-  private val menuKeyMask = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
 
   def main(args: Array[String]) {
     val f = new Frame()
@@ -122,13 +122,15 @@ object Rocks {
     val dev = env.getDefaultScreenDevice
     dev.setFullScreenWindow(f)
 
-    f.createBufferStrategy(2)
+    def imageCaps = new ImageCapabilities(true)
+    f.createBufferStrategy(2, new BufferCapabilities(imageCaps, imageCaps, FlipContents.BACKGROUND))
     val bufferStrategy = f.getBufferStrategy
 
+    // TODO something less ugly than raw functions
     def doPaint(p: (Graphics2D, Rectangle) => Unit) = {
       val g2 = bufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D]
       try {
-        g2.clearRect(0, 0, f.getBounds.width, f.getBounds.height)
+//        g2.clearRect(0, 0, f.getBounds.width, f.getBounds.height)
         p(g2, f.getBounds)
       } finally {
         g2.dispose()
@@ -137,27 +139,6 @@ object Rocks {
     }
 
     val rocks = new Rocks(f.getBounds, doPaint)
-
-    def quit() = {
-      rocks.stop()
-      System.exit(0)
-    }
-
-    // TODO why doesn't this work?
-    KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(
-      new KeyEventDispatcher {
-        override def dispatchKeyEvent(e: KeyEvent): Boolean = {
-          if (e.getID == KeyEvent.KEY_RELEASED) {
-            e.getKeyCode match {
-              case KeyEvent.VK_Q if (e.getModifiers & menuKeyMask) != 0  => quit()
-              case KeyEvent.VK_ESCAPE => quit()
-              case _ =>
-            }
-          }
-          false
-        }
-      }
-    )
 
     rocks.start()
   }
