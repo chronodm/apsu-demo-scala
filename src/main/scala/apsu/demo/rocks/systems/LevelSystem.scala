@@ -20,8 +20,8 @@ class LevelSystem(mgr: EntityManager) extends System  {
 
   private val r = new Random()
 
-  val shipRenderable: Renderable = Renderable(32, 32, "/sprites/ship/ship-128-n.png")
-  val rockRenderable: Renderable = Renderable(96, 96, "/sprites/rock/rock-lg-384-n.png")
+  val shipRenderable: Renderable = Renderable(24, 24, "/sprites/ship/ship-96-n.png")
+  val rockRenderable: Renderable = Renderable(64, 64, "/sprites/rock/rock-lg-256-n.png")
 
   val numRocks = 6
   val rockSpeed = 50
