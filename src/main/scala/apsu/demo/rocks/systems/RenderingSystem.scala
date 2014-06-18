@@ -5,23 +5,25 @@ import java.awt.{Rectangle, Graphics2D}
 import apsu.demo.rocks.components.{Orientation, Position, Renderable}
 import org.apache.log4j.Logger
 import java.awt.geom.AffineTransform
+import apsu.demo.rocks.shared.{Painter, PaintHandler}
 
 /**
  * RenderingSystem
  *
  * @author david
  */
-class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D, Rectangle) => Unit) => Unit) extends System {
+class RenderingSystem(mgr: EntityManager, paintHandler: PaintHandler) extends System {
 
   private val log = Logger.getLogger(classOf[RenderingSystem])
 
   override def nickname: String = "Rendering"
 
   override def processTick(lastDelta: Long): Unit = {
-    doPaint({
-      (g2, bounds) =>
-        val frameRate = "%1.0f" format (1e6 / lastDelta)
-        g2.drawString(s"$frameRate FPS", 0f, bounds.height)
+
+    val painter = new Painter {
+      override def paint(g2: Graphics2D, bounds: Rectangle): Unit = {
+        val frameRate = Math.round(1e6 / lastDelta)
+        g2.drawString(s"FPS: $frameRate", 0f, bounds.height)
 
         mgr.all[Renderable].foreach({
           case (e, r) =>
@@ -40,10 +42,13 @@ class RenderingSystem(mgr: EntityManager, doPaint: ((Graphics2D, Rectangle) => U
 
                 g2.drawImage(img, tx, null)
 
-                log.debug(s"Rendered ${mgr.getNickname(e).getOrElse("")} at ${p} with ${o}")
+                log.trace(s"Rendered ${mgr.getNickname(e).getOrElse("")} at $p with $o")
               case _ => // TODO clean up all these "case _ =>" s
             }
         })
-    })
+      }
+    }
+
+    paintHandler.doPaint(painter)
   }
 }

@@ -13,6 +13,7 @@ object GameState {
   val setup = GameState("setup")
   val playing = GameState("playing")
   val gameOver = GameState("gameOver")
+  val quit = GameState("quit")
 }
 
 case class GameState private(name: String) extends EnumLike[GameState] {

@@ -39,7 +39,7 @@ class MovementSystem(mgr: EntityManager) extends System {
           case _ => Position(newX, newY)
         }
 
-        log.debug(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
+        log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
 
         mgr.set(e, p1)
     })

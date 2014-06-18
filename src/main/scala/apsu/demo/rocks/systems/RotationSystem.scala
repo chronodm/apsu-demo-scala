@@ -23,7 +23,7 @@ class RotationSystem(mgr: EntityManager) extends System {
         val dTheta = deltaSeconds * w.theta
         val o1 = o0 + dTheta
 
-        log.debug(s"Rotating ${mgr.getNickname(e).getOrElse("")} from $o0 to $o1 ($w)")
+        log.trace(s"Rotating ${mgr.getNickname(e).getOrElse("")} from $o0 to $o1 ($w)")
 
         mgr.set(e, o1)
     })

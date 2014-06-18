@@ -1,6 +1,6 @@
 package apsu.demo.rocks.systems
 
-import apsu.core.{Entity, EntityManager, System}
+import apsu.core.{EntityManager, System}
 import apsu.demo.rocks.components._
 import apsu.demo.rocks.components.Position
 import apsu.demo.rocks.components.World

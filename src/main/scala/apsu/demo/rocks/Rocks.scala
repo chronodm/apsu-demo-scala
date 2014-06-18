@@ -3,21 +3,21 @@ package apsu.demo.rocks
 import apsu.core.MapEntityManager
 import java.util.concurrent.TimeUnit
 import javax.swing.JComponent
-import java.awt.event.KeyEvent
+import java.awt.event.WindowAdapter
 import java.awt._
 import apsu.demo.rocks.components._
-import apsu.demo.rocks.systems.{LevelSystem, RotationSystem, MovementSystem, RenderingSystem}
-import apsu.demo.rocks.components.Position
-import apsu.demo.rocks.components.World
+import apsu.demo.rocks.systems._
 import org.apache.log4j.Logger
-import java.awt.BufferCapabilities.FlipContents
+import apsu.demo.rocks.shared.MainWindow
+import apsu.demo.rocks.components.World
+import java.lang.Thread.UncaughtExceptionHandler
 
 /**
  * Rocks
  *
  * @author david
  */
-class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Unit) {
+class Rocks(mainWindow: MainWindow) {
 
   // ------------------------------------------------------
   // Constants
@@ -41,7 +41,7 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
   // Starting entities
 
   val world = mgr.newEntity("World")
-  mgr.set(world, new World(bounds.width, bounds.height))
+  mgr.set(world, new World(mainWindow.getWidth, mainWindow.getHeight))
 
   val state = mgr.newEntity("State")
   mgr.set(state, GameState.init)
@@ -52,7 +52,12 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
   private val levelSystem = new LevelSystem(mgr)
   private val movementSystem = new MovementSystem(mgr)
   private val rotationSystem = new RotationSystem(mgr)
-  private val renderingSystem = new RenderingSystem(mgr, doPaint)
+  private val renderingSystem = new RenderingSystem(mgr, mainWindow)
+  private val keyboardInputSystem = {
+    val kis = new KeyboardInputSystem
+    KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(kis)
+    kis
+  }
 
   // ------------------------------------------------------
   // Methods
@@ -67,12 +72,13 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
 
   def update(deltaMicros: Long) {
     levelSystem.processTick(deltaMicros)
+    keyboardInputSystem.processTick(deltaMicros)
     movementSystem.processTick(deltaMicros)
     rotationSystem.processTick(deltaMicros)
   }
 
   def render(lastDelta: Long) {
-    log.debug(s"render() at ${System.nanoTime()}")
+    log.trace(s"render() at ${System.nanoTime()}")
     renderingSystem.processTick(lastDelta)
   }
 
@@ -103,7 +109,7 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
       render(lastDelta)
 
       val now = System.nanoTime()
-      log.debug(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
+      log.trace(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
       lastRender = System.nanoTime()
     }
 
@@ -111,62 +117,24 @@ class Rocks(bounds: Rectangle, doPaint: ((Graphics2D, Rectangle) => Unit) => Uni
 }
 
 object Rocks {
-  private val menuKeyMask = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
+  private val log = Logger.getLogger(classOf[Rocks])
 
   def main(args: Array[String]) {
-    val f = new Frame()
-    f.setBackground(Color.BLACK)
-    f.setResizable(false)
-    f.pack()
 
-    val env = GraphicsEnvironment.getLocalGraphicsEnvironment
-    val dev = env.getDefaultScreenDevice
-    dev.setFullScreenWindow(f)
-
-    // Keyboard focus hack; see http://stackoverflow.com/questions/13064607/fullscreen-swing-components-fail-to-receive-keyboard-input-on-java-7-on-mac-os-x
-    f.setVisible(false)
-    f.setVisible(true)
-
-
-    def imageCaps = new ImageCapabilities(true)
-    f.createBufferStrategy(2, new BufferCapabilities(imageCaps, imageCaps, FlipContents.BACKGROUND))
-    val bufferStrategy = f.getBufferStrategy
-
-    // TODO something less ugly than raw functions
-    def doPaint(p: (Graphics2D, Rectangle) => Unit) = {
-      val g2 = bufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D]
-      try {
-//        g2.clearRect(0, 0, f.getBounds.width, f.getBounds.height)
-        p(g2, f.getBounds)
-      } finally {
-        g2.dispose()
+    Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler {
+      override def uncaughtException(t: Thread, e: Throwable): Unit = {
+        log.error(e)
+        System.err.println(e)
+        System.exit(1)
       }
-      bufferStrategy.show()
-    }
+    })
 
-    val rocks = new Rocks(f.getBounds, doPaint)
+    val mainWindow = new MainWindow(false)
+    mainWindow.show()
 
-    def quit() = {
-      rocks.stop()
-      System.exit(0)
-    }
-
-    // TODO why doesn't this work?
-    KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(
-      new KeyEventDispatcher {
-        override def dispatchKeyEvent(e: KeyEvent): Boolean = {
-          if (e.getID == KeyEvent.KEY_RELEASED) {
-            e.getKeyCode match {
-              case KeyEvent.VK_Q if (e.getModifiers & menuKeyMask) != 0  => quit()
-              case KeyEvent.VK_ESCAPE => quit()
-              case _ =>
-            }
-          }
-          false
-        }
-      }
-    )
-
+    val rocks = new Rocks(mainWindow)
     rocks.start()
+
+
   }
 }
