@@ -1,4 +1,4 @@
-package apsu.demo.rocks.components
+package apsu.demo.rocks.components.geometry
 
 /**
  * A position in Java2d user space

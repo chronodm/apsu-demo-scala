@@ -1,4 +1,4 @@
-package apsu.demo.rocks.components
+package apsu.demo.rocks.components.geometry
 
 /**
  * Velocity, in Java2D userspace pixels per second,
@@ -21,4 +21,15 @@ case class Velocity(x: Double, y: Double) {
   }
 
   override def toString: String = s"<$x, $y>"
+}
+
+object Velocity {
+
+  def fromCartesian(x: Double, y: Double): Velocity = Velocity(x, y)
+
+  def fromPolar(magnitude: Double, theta: Double): Velocity = {
+    val vX = Math.cos(theta) * magnitude
+    val vY = Math.sin(theta) * magnitude
+    Velocity(vX, vY)
+  }
 }

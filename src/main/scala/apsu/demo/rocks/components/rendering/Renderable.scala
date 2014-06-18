@@ -1,4 +1,4 @@
-package apsu.demo.rocks.components
+package apsu.demo.rocks.components.rendering
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage

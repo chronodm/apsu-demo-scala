@@ -1,8 +1,8 @@
 package apsu.demo.rocks.systems
 
 import org.scalatest.{FlatSpec, Matchers}
-import apsu.demo.rocks.components.Orientation
 import apsu.demo.testutils.DoubleEquality
+import apsu.demo.rocks.components.geometry.Orientation
 
 /**
  * OrientationSpec
@@ -88,5 +88,5 @@ class OrientationSpec extends FlatSpec with Matchers {
     o0.theta should be(o1.theta)
     (o0 == o1) should be(true)
   }
-  
+
 }

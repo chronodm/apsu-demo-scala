@@ -1,4 +1,4 @@
-package apsu.demo.rocks.components
+package apsu.demo.rocks.components.geometry
 
 /**
  * Angular velocity, in radians per second

@@ -2,8 +2,8 @@ package apsu.demo.rocks.systems
 
 import apsu.core.{EntityManager, System}
 import apsu.core.System.secondsPerMicro
-import apsu.demo.rocks.components.{Orientation, AngularVelocity}
 import org.apache.log4j.Logger
+import apsu.demo.rocks.components.geometry.{Orientation, AngularVelocity}
 
 /**
  * RotationSystem

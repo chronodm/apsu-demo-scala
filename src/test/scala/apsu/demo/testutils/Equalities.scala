@@ -2,7 +2,7 @@ package apsu.demo.testutils
 
 import org.scalautils.Equality
 import java.math.MathContext
-import apsu.demo.rocks.components.{Orientation, Position}
+import apsu.demo.rocks.components.geometry.{Orientation, Position}
 
 /**
  * Checks double equality to the specified number of

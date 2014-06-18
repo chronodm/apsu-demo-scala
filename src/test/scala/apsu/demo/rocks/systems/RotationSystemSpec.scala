@@ -3,8 +3,8 @@ package apsu.demo.rocks.systems
 import org.scalatest.{Matchers, fixture}
 import apsu.core.{MapEntityManager, EntityManager}
 import apsu.demo.testutils.OrientationEquality
-import apsu.demo.rocks.components.{AngularVelocity, Orientation}
 import java.util.concurrent.TimeUnit
+import apsu.demo.rocks.components.geometry.{Orientation, AngularVelocity}
 
 /**
  * RotationSystemSpec

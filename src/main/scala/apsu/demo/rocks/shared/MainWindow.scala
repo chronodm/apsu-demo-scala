@@ -39,9 +39,10 @@ class MainWindow(fullscreen: Boolean) extends PaintHandler {
       frame.setVisible(true)
     } else {
       val screenSize = Toolkit.getDefaultToolkit.getScreenSize
-      val frameSize = new Dimension(Math.round(0.8f * screenSize.width), Math.round(0.8f * screenSize.height))
-      val frameX = Math.round(screenSize.width * 0.1f)
-      val frameY = Math.round(screenSize.height * 0.1f)
+      val scale  = 0.5f
+      val frameSize = new Dimension(Math.round(scale * screenSize.width), Math.round(scale * screenSize.height))
+      val frameX = (screenSize.width - frameSize.width) / 2
+      val frameY = (screenSize.height - frameSize.height) / 2
       frame.setBounds(frameX, frameY, frameSize.width, frameSize.height)
       frame.setVisible(true)
     }

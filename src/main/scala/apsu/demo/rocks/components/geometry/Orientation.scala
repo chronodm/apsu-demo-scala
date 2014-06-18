@@ -1,9 +1,9 @@
-package apsu.demo.rocks.components
+package apsu.demo.rocks.components.geometry
 
 import org.apache.commons.math3.util.MathUtils
 
 /**
- * Orientation, as an angle in radians
+ * Orientation, as an angle in radians (normalized to +/- 2pi)
  *
  * @author david
  */

@@ -2,9 +2,10 @@ package apsu.demo.rocks.systems
 
 import org.scalatest.{fixture, Matchers}
 import apsu.core.{MapEntityManager, EntityManager}
-import apsu.demo.rocks.components.{World, Position, Velocity}
 import java.util.concurrent.TimeUnit
 import apsu.demo.testutils.PositionEquality
+import apsu.demo.rocks.components.geometry.{Position, Velocity}
+import apsu.demo.rocks.components.rendering.World
 
 /**
  * MovementSystemSpec

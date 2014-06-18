@@ -2,15 +2,13 @@ package apsu.demo.rocks
 
 import apsu.core.MapEntityManager
 import java.util.concurrent.TimeUnit
-import javax.swing.JComponent
-import java.awt.event.WindowAdapter
 import java.awt._
 import apsu.demo.rocks.components._
 import apsu.demo.rocks.systems._
 import org.apache.log4j.Logger
 import apsu.demo.rocks.shared.MainWindow
-import apsu.demo.rocks.components.World
 import java.lang.Thread.UncaughtExceptionHandler
+import apsu.demo.rocks.components.rendering.World
 
 /**
  * Rocks
@@ -49,15 +47,20 @@ class Rocks(mainWindow: MainWindow) {
   // ------------------------------------------------------
   // Systems
 
-  private val levelSystem = new LevelSystem(mgr)
-  private val movementSystem = new MovementSystem(mgr)
-  private val rotationSystem = new RotationSystem(mgr)
   private val renderingSystem = new RenderingSystem(mgr, mainWindow)
   private val keyboardInputSystem = {
-    val kis = new KeyboardInputSystem
+    val kis = new KeyboardInputSystem(mgr)
     KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(kis)
     kis
   }
+
+  private val systems = scala.collection.immutable.List[apsu.core.System](
+    new LevelSystem(mgr),
+    keyboardInputSystem,
+    new CommandSystem(mgr),
+    new MovementSystem(mgr),
+    new RotationSystem(mgr)
+  )
 
   // ------------------------------------------------------
   // Methods
@@ -71,10 +74,9 @@ class Rocks(mainWindow: MainWindow) {
   }
 
   def update(deltaMicros: Long) {
-    levelSystem.processTick(deltaMicros)
-    keyboardInputSystem.processTick(deltaMicros)
-    movementSystem.processTick(deltaMicros)
-    rotationSystem.processTick(deltaMicros)
+    for (system <- systems) {
+      system.processTick(deltaMicros)
+    }
   }
 
   def render(lastDelta: Long) {
@@ -112,7 +114,6 @@ class Rocks(mainWindow: MainWindow) {
       log.trace(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
       lastRender = System.nanoTime()
     }
-
   }
 }
 

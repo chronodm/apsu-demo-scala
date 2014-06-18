@@ -2,16 +2,17 @@ package apsu.demo.rocks.systems
 
 import apsu.core.{EntityManager, System}
 import java.awt.{Rectangle, Graphics2D}
-import apsu.demo.rocks.components.{Orientation, Position, Renderable}
 import org.apache.log4j.Logger
 import java.awt.geom.AffineTransform
 import apsu.demo.rocks.shared.{Painter, PaintHandler}
+import apsu.demo.rocks.components.geometry.{Orientation, Position}
+import apsu.demo.rocks.components.rendering.Renderable
 
 /**
  * RenderingSystem
  *
  * @author david
- */
+ */ // TODO make PaintHandler a component or something
 class RenderingSystem(mgr: EntityManager, paintHandler: PaintHandler) extends System {
 
   private val log = Logger.getLogger(classOf[RenderingSystem])

@@ -1,9 +1,10 @@
 package apsu.demo.rocks.systems
 
 import apsu.core.{Entity, EntityManager, System}
-import apsu.demo.rocks.components.{World, Velocity, Position}
 import apsu.core.System.secondsPerMicro
 import org.apache.log4j.Logger
+import apsu.demo.rocks.components.geometry.{Position, Velocity}
+import apsu.demo.rocks.components.rendering.World
 
 /**
  * MovementSystem
