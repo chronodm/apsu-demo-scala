@@ -29,6 +29,7 @@ class KeyboardInputSystem(mgr: EntityManager) extends System with KeyEventDispat
 
     if (!pending.isEmpty) log.trace(s"Found ${pending.size} pending key events in queue")
 
+    // TODO separate player and ship
     val commands = (for (e <- pending) yield Command(e)).flatten
     mgr.all[PlayerShip].foreach({
       case (e, s) =>
@@ -42,6 +43,7 @@ class KeyboardInputSystem(mgr: EntityManager) extends System with KeyEventDispat
     })
   }
 
+  // TODO support n-key rollover
   override def dispatchKeyEvent(e: KeyEvent): Boolean = {
     log.trace(s"dispatchKeyEvent($e)")
     if (e.getID == KeyEvent.KEY_PRESSED) {

@@ -25,6 +25,7 @@ class CollisionSystem(mgr: EntityManager) extends System {
           case Collision(Collideable.playerShip, Collideable.rock) |
                Collision(Collideable.playerBullet, Collideable.rock) |
                Collision(Collideable.rock, Collideable.playerBullet) =>
+            log.debug(s"Setting destruction on $e for $c")
             mgr.set[Destruction](e, Destruction())
           case _ =>
         }

@@ -25,6 +25,8 @@ object Rock {
   private val speeds = Map( small -> 200, medium -> 100, large -> 50 )
 
   private val spins = Map( small -> 4, medium -> 2, large -> 1)
+
+  private val childSizes = Map(medium -> small, large -> medium)
 }
 
 case class Rock private(name: String) extends EnumLike[Rock] {
@@ -34,8 +36,9 @@ case class Rock private(name: String) extends EnumLike[Rock] {
   lazy val renderable = Rock.renderables(this)
   lazy val speed = Rock.speeds(this)
   lazy val spin = Rock.spins(this)
+  lazy val childSize = Rock.childSizes.get(this)
 
-  def add(vTheta: Double, position: Position, clockwise: Boolean, mgr: EntityManager, w: World) {
+  def add(vTheta: Double, position: Position, clockwise: Boolean, mgr: EntityManager) {
     val rock = mgr.newEntity()
     mgr.setNickname(rock, s"Rock ${rock.id.toString}")
     mgr.set(rock, this)
@@ -46,6 +49,8 @@ case class Rock private(name: String) extends EnumLike[Rock] {
     mgr.set(rock, if (clockwise) AngularVelocity(-spin) else AngularVelocity(spin))
     mgr.set(rock, Collideable.rock)
   }
+
+
 }
 
 private object RockSizeRegistry extends EnumRegistry[Rock]

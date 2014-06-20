@@ -10,6 +10,8 @@ import apsu.demo.rocks.components.collision.Collideable
  *
  * @author david
  */
+case class PlayerBullet()
+
 object PlayerBullet {
   val renderable = Renderable(8, 4, "/sprites/ship/bullet-32x16-e.png")
 
@@ -18,7 +20,7 @@ object PlayerBullet {
   def add(shipVelocity: Velocity, shipPosition: Position, shipOrientation: Orientation, mgr: EntityManager) = {
     val bullet = mgr.newEntity()
     mgr.setNickname(bullet, s"Bullet ${bullet.id.toString}")
-    mgr.set(bullet, this)
+    mgr.set(bullet, PlayerBullet())
     mgr.set(bullet, renderable)
     mgr.set(bullet, shipPosition) // TODO don't generate right on top of player
     mgr.set(bullet, shipOrientation)

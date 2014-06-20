@@ -73,7 +73,7 @@ class LevelSystem(mgr: EntityManager) extends System  {
           r.nextDouble() * (2 * Math.PI),
           Position(r.nextInt(w.width), r.nextInt(w.height)),
           r.nextBoolean(),
-          mgr, w)
+          mgr)
       case _ => // TODO clean up all these "case _ =>" s
     }
   }

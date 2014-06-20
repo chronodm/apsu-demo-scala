@@ -1,9 +1,10 @@
 package apsu.demo.rocks.systems
 
-import apsu.core.{System, EntityManager}
+import apsu.core.{Entity, System, EntityManager}
 import org.apache.log4j.Logger
 import apsu.demo.rocks.components.collision.Destruction
-import apsu.demo.rocks.components.sprites.PlayerShip
+import apsu.demo.rocks.components.sprites.{PlayerBullet, Rock, PlayerShip}
+import apsu.demo.rocks.components.geometry.{Velocity, Position}
 
 /**
  * DestructionSystem
@@ -19,12 +20,42 @@ class DestructionSystem (mgr: EntityManager) extends System {
   override def processTick(deltaMicros: Long): Unit = {
     mgr.all[Destruction].foreach {
       case (e, d) =>
+        // TODO this is awkward; these are exclusive. Separate systems?
         mgr.get[PlayerShip](e) match {
           case Some(ps) =>
-
+            // TODO this is a hack to remove the player ship without invalidating the exit command; we can do better
+//            mgr.delete(e)
+//            mgr.set(e, ps)
+            // TODO lose life and/or game over
           case _ => // TODO clean up all these "case _ =>" s
         }
-        mgr.delete(e)
+        mgr.get[Rock](e) match {
+          case Some(r) =>
+            split(e, r)
+            mgr.delete(e)
+          case _ => // TODO clean up all these "case _ =>" s
+        }
+        mgr.get[PlayerBullet](e) match {
+          case Some(pb) =>
+            mgr.delete(e)
+          case _ => // TODO clean up all these "case _ =>" s
+        }
+        log.trace(s"Deleting $e due to $d")
+        mgr.remove[Destruction](e)
+    }
+  }
+
+  private def split(e: Entity, r: Rock) {
+    r.childSize match {
+      case Some(r1) =>
+        (mgr.get[Velocity](e), mgr.get[Position](e)) match {
+          case (Some(v), Some(p)) =>
+            for (vTheta <- Seq(v.theta + Math.PI / 2, v.theta - Math.PI / 2)) {
+              r1.add(vTheta, p, vTheta > 0, mgr)
+            }
+          case _ => // TODO clean up all these "case _ =>" s
+        }
+      case _ => // TODO clean up all these "case _ =>" s
     }
   }
 }

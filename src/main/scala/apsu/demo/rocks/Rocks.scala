@@ -62,7 +62,8 @@ class Rocks(mainWindow: MainWindow) {
     new RotationSystem(mgr),
     new FrictionSystem(mgr),
     new CollisionDetectionSystem(mgr),
-    new CollisionSystem(mgr)
+    new CollisionSystem(mgr),
+    new DestructionSystem(mgr)
   )
 
   // ------------------------------------------------------
