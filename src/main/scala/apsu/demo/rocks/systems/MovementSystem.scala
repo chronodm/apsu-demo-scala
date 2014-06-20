@@ -3,7 +3,7 @@ package apsu.demo.rocks.systems
 import apsu.core.{Entity, EntityManager, System}
 import apsu.core.System.secondsPerMicro
 import org.apache.log4j.Logger
-import apsu.demo.rocks.components.geometry.{Position, Velocity}
+import apsu.demo.rocks.components.geometry.{DeleteAtEdge, Position, Velocity}
 import apsu.demo.rocks.components.rendering.World
 
 /**
@@ -42,7 +42,13 @@ class MovementSystem(mgr: EntityManager) extends System {
 
         log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
 
-        mgr.set(e, p1)
+        val didWrap = p1.x != newX || p1.y != newY
+        mgr.get[DeleteAtEdge](e) match {
+          case Some(_) if didWrap =>
+            mgr.delete(e)
+          case _ =>
+            mgr.set(e, p1)
+        }
     })
   }
 

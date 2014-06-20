@@ -16,6 +16,14 @@ case class Velocity(x: Double, y: Double) {
     Velocity(x - that.x, y - that.y)
   }
 
+  def +(that: Double): Velocity = {
+    Velocity.fromPolar(magnitude + that, theta)
+  }
+
+  def -(that: Double): Velocity = {
+    Velocity.fromPolar(magnitude - that, theta)
+  }
+
   lazy val magnitude: Double = {
     Math.sqrt(x*x + y*y)
   }

@@ -2,9 +2,10 @@ package apsu.demo.rocks.systems
 
 import apsu.core.{System, Entity, EntityManager}
 import apsu.demo.rocks.components.command.CommandQueue
-import apsu.demo.rocks.components.geometry.{Velocity, Orientation}
+import apsu.demo.rocks.components.geometry.{Position, Velocity, Orientation}
 import apsu.demo.rocks.components.command.Command
 import org.apache.log4j.Logger
+import apsu.demo.rocks.components.sprites.{PlayerBullet, PlayerShip}
 
 /**
  * CommandSystem
@@ -33,6 +34,8 @@ class CommandSystem (mgr: EntityManager) extends System {
               rotateCW(e)
             case Command.rotateCounterclockwise =>
               rotateCCW(e)
+            case Command.fire =>
+              fire(e)
             case Command.exit =>
               java.lang.System.exit(0)
           }
@@ -69,5 +72,13 @@ class CommandSystem (mgr: EntityManager) extends System {
     val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
     val o1 = o0 - oIncrement
     mgr.set(e, o1)
+  }
+
+  def fire(e: Entity) {
+    val v0 = mgr.get[Velocity](e).getOrElse(Velocity(0, 0))
+    val p0 = mgr.get[Position](e).getOrElse(Position(0, 0)) // TODO use ship default position
+    val o0 = mgr.get[Orientation](e).getOrElse(PlayerShip.defaultOrientation)
+
+    PlayerBullet.add(v0, p0, o0, mgr)
   }
 }

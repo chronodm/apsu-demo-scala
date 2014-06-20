@@ -60,7 +60,9 @@ class Rocks(mainWindow: MainWindow) {
     new CommandSystem(mgr),
     new MovementSystem(mgr),
     new RotationSystem(mgr),
-    new FrictionSystem(mgr)
+    new FrictionSystem(mgr),
+    new CollisionDetectionSystem(mgr),
+    new CollisionSystem(mgr)
   )
 
   // ------------------------------------------------------
@@ -125,7 +127,7 @@ object Rocks {
 
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler {
       override def uncaughtException(t: Thread, e: Throwable): Unit = {
-        log.error(e)
+        log.error(e.getMessage, e)
         System.err.println(e)
         System.exit(1)
       }

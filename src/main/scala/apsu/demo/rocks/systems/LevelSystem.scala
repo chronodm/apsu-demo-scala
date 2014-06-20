@@ -6,12 +6,13 @@ import scala.Some
 import java.util.Random
 import apsu.demo.rocks.components.geometry._
 import apsu.demo.rocks.components.rendering.{World, Renderable}
-import apsu.demo.rocks.components.PlayerShip
 import apsu.demo.rocks.components.geometry.Position
 import apsu.demo.rocks.components.rendering.World
 import apsu.demo.rocks.components.rendering.Renderable
 import scala.Some
 import apsu.demo.rocks.components.geometry.AngularVelocity
+import apsu.demo.rocks.components.collision.Collideable
+import apsu.demo.rocks.components.sprites.{Rock, PlayerShip}
 
 /**
  * LevelSystem
@@ -53,12 +54,7 @@ class LevelSystem(mgr: EntityManager) extends System  {
   def initPlayerShip() {
     mgr.all[World].headOption match {
       case Some((_, w)) =>
-        val shipEntity = mgr.newEntity("playerShip")
-        mgr.set(shipEntity, PlayerShip(1)) // always player 1
-        mgr.set(shipEntity, Position(w.width / 2, w.height / 2))
-        mgr.set(shipEntity, Orientation(-0.5 * Math.PI))
-        mgr.set(shipEntity, shipRenderable)
-        mgr.set(shipEntity, Friction(0.99))
+        PlayerShip(1).add(mgr, w) // always player 1
       case _ => // TODO clean up all these "case _ =>" s
     }
   }
@@ -73,27 +69,13 @@ class LevelSystem(mgr: EntityManager) extends System  {
     // TODO avoid player ship collisions on startup
     mgr.all[World].headOption match {
       case Some((_, w)) =>
-        val rock = mgr.newEntity()
-        mgr.setNickname(rock, s"Rock ${rock.id.toString}")
-
-        mgr.set(rock, rockRenderable)
-        mgr.set(rock, Position(r.nextInt(w.width), r.nextInt(w.height)))
-        mgr.set(rock, Orientation(0))
-        mgr.set(rock, randomVelocity(rockSpeed))
-        mgr.set(rock, randomAngularVelocity(rockSpin))
+        Rock.large.add(
+          r.nextDouble() * (2 * Math.PI),
+          Position(r.nextInt(w.width), r.nextInt(w.height)),
+          r.nextBoolean(),
+          mgr, w)
       case _ => // TODO clean up all these "case _ =>" s
     }
   }
 
-  def randomVelocity(magnitude: Double) = {
-    Velocity.fromPolar(magnitude, r.nextDouble() * (2 * Math.PI))
-  }
-
-  def randomAngularVelocity(magnitude: Double) = {
-    if (r.nextBoolean()) {
-      AngularVelocity(magnitude)
-    } else {
-      AngularVelocity(-magnitude)
-    }
-  }
 }

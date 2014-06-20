@@ -21,6 +21,7 @@ object Command {
   val accelerate = Command("accelerate")
   val rotateClockwise = Command("rotateClockwise")
   val rotateCounterclockwise = Command("rotateCounterclockwise")
+  val fire = Command("fire")
 
   val exit = Command("exit")
 
@@ -40,11 +41,13 @@ object Command {
       case KeyEvent.VK_D => Some(rotateClockwise)
       case KeyEvent.VK_RIGHT => Some(rotateClockwise)
 
+      case KeyEvent.VK_SPACE => Some(fire)
+
       case KeyEvent.VK_ESCAPE => Some(exit)
 
       case _ => None
     }
-    log.debug(s"apply($e) returning $cmd")
+    log.trace(s"apply($e) returning $cmd")
     cmd
   }
 }

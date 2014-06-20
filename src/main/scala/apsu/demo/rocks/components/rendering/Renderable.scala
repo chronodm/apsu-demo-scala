@@ -16,4 +16,6 @@ case class Renderable(width: Double, height: Double, imgResource: String) {
 
   val scaleX = width / img.getWidth
   val scaleY = height / img.getHeight
+
+  val radius = (width + height) * 0.25 // average of 1/2 width & 1/2 height
 }

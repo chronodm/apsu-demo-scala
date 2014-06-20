@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent
 import scala.collection.immutable.Queue
 import org.apache.log4j.Logger
 import apsu.demo.rocks.components.command.{CommandQueue, Command}
-import apsu.demo.rocks.components.PlayerShip
+import apsu.demo.rocks.components.sprites.PlayerShip
 
 /**
  * KeyboardInputHandler
