@@ -10,9 +10,12 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'maven'
 apply plugin: 'scalatest'
+apply plugin: 'application'
 
 group = 'apsu'
 version = '1.0-SNAPSHOT'
+
+mainClassName = 'apsu.demo.rocks.Rocks'
 
 ext {
     scalaMajorVersion = '2.10'
