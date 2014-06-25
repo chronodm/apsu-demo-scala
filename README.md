@@ -15,6 +15,7 @@ To build and run:
   `./gradlew installApp`
 - run `build/install/apsu-demo-scala/bin/apsu-demo-scala` (or
   the `.bat` equivalent)
+- arrow keys or WASD to move, space to shoot, Esc to exit.
 
 Note that Rocks uses double precision, which is completely
 unnecessary but makes the code simpler. We can get away with it
