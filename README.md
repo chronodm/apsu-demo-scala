@@ -17,3 +17,6 @@ To build and run:
   the `.bat` equivalent)
 - arrow keys or WASD to move, space to shoot, Esc to exit.
 
+## License
+
+MIT; see [LICENSE.txt](https://github.com/chronodm/apsu-demo-scala/blob/master/LICENSE.txt)
