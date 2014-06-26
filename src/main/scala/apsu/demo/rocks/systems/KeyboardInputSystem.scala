@@ -31,16 +31,15 @@ class KeyboardInputSystem(mgr: EntityManager) extends System with KeyEventDispat
 
     // TODO separate player and ship
     val commands = (for (e <- pending) yield Command(e)).flatten
-    mgr.all[PlayerShip].foreach({
-      case (e, s) =>
-        if (!commands.isEmpty) log.trace(s"Enqueuing ${commands.size} commands")
-        mgr.get[CommandQueue](e) match {
-          case Some(cq0) =>
-            mgr.set(e, cq0 + commands)
-          case _ =>
-            mgr.set(e, CommandQueue(commands))
-        }
-    })
+    for ((e, s) <- mgr.all[PlayerShip]) {
+      if (!commands.isEmpty) log.trace(s"Enqueuing ${commands.size} commands")
+      mgr.get[CommandQueue](e) match {
+        case Some(cq0) =>
+          mgr.set(e, cq0 + commands)
+        case _ =>
+          mgr.set(e, CommandQueue(commands))
+      }
+    }
   }
 
   // TODO support n-key rollover

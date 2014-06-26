@@ -16,20 +16,18 @@ class CollisionSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Collision"
 
   override def processTick(deltaMicros: Long): Unit = {
-    mgr.all[Collision].foreach {
-      case (e, c) =>
+    for ((e, c) <- mgr.all[Collision]) {
+      log.trace(s"Found collision $c on $e")
 
-        log.trace(s"Found collision $c on $e")
-
-        c match {
-          case Collision(Collideable.playerShip, Collideable.rock) |
-               Collision(Collideable.playerBullet, Collideable.rock) |
-               Collision(Collideable.rock, Collideable.playerBullet) =>
-            log.debug(s"Setting destruction on $e for $c")
-            mgr.set[Destruction](e, Destruction())
-          case _ =>
-        }
-        mgr.remove[Collision](e)
+      c match {
+        case Collision(Collideable.playerShip, Collideable.rock) |
+             Collision(Collideable.playerBullet, Collideable.rock) |
+             Collision(Collideable.rock, Collideable.playerBullet) =>
+          log.debug(s"Setting destruction on $e for $c")
+          mgr.set[Destruction](e, Destruction())
+        case _ =>
+      }
+      mgr.remove[Collision](e)
     }
   }
 }

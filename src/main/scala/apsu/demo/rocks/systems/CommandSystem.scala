@@ -12,7 +12,7 @@ import apsu.demo.rocks.components.sprites.{PlayerBullet, PlayerShip}
  *
  * @author david
  */
-class CommandSystem (mgr: EntityManager) extends System {
+class CommandSystem(mgr: EntityManager) extends System {
 
   private val log = Logger.getLogger(classOf[CommandSystem])
 
@@ -23,25 +23,24 @@ class CommandSystem (mgr: EntityManager) extends System {
   override def nickname: String = "CommandSystem"
 
   override def processTick(deltaMicros: Long): Unit = {
-    mgr.all[CommandQueue].foreach({
-      case (e, cq) =>
-        for (c <- cq.commands) {
-          log.trace(s"Invoking: $c")
-          c match {
-            case Command.accelerate =>
-              accelerate(e)
-            case Command.rotateClockwise =>
-              rotateCW(e)
-            case Command.rotateCounterclockwise =>
-              rotateCCW(e)
-            case Command.fire =>
-              fire(e)
-            case Command.exit =>
-              java.lang.System.exit(0)
-          }
+    for ((e, cq) <- mgr.all[CommandQueue]) {
+      for (c <- cq.commands) {
+        log.trace(s"Invoking: $c")
+        c match {
+          case Command.accelerate =>
+            accelerate(e)
+          case Command.rotateClockwise =>
+            rotateCW(e)
+          case Command.rotateCounterclockwise =>
+            rotateCCW(e)
+          case Command.fire =>
+            fire(e)
+          case Command.exit =>
+            java.lang.System.exit(0)
         }
-        mgr.remove[CommandQueue](e)
-    })
+      }
+      mgr.remove[CommandQueue](e)
+    }
   }
 
   // TODO maybe Command shouldn't be a case class / enum and these should be encapsulated?

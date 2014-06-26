@@ -16,16 +16,15 @@ class RotationSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Rotation"
 
   override def processTick(deltaMicros: Long): Unit = {
-    mgr.all[AngularVelocity].foreach[Unit]({
-      case (e, w) =>
-        val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
-        val deltaSeconds = deltaMicros * secondsPerMicro
-        val dTheta = deltaSeconds * w.theta
-        val o1 = o0 + dTheta
+    for ((e, w) <- mgr.all[AngularVelocity]) {
+      val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
+      val deltaSeconds = deltaMicros * secondsPerMicro
+      val dTheta = deltaSeconds * w.theta
+      val o1 = o0 + dTheta
 
-        log.trace(s"Rotating ${mgr.getNickname(e).getOrElse("")} from $o0 to $o1 ($w)")
+      log.trace(s"Rotating ${mgr.getNickname(e).getOrElse("")} from $o0 to $o1 ($w)")
 
-        mgr.set(e, o1)
-    })
+      mgr.set(e, o1)
+    }
   }
 }

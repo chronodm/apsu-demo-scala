@@ -13,12 +13,11 @@ class FrictionSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Friction"
 
   override def processTick(deltaMicros: Long): Unit = {
-    mgr.all[Friction].foreach({
-      case (e, f) =>
-        mgr.get[Velocity](e) foreach { v =>
-          val v1 = Velocity.fromPolar(v.magnitude * f.coeff, v.theta)
-          mgr.set(e, v1)
-        }
-    })
+    for ((e, f) <- mgr.all[Friction]) {
+      for (v <- mgr.get[Velocity](e)) {
+        val v1 = Velocity.fromPolar(v.magnitude * f.coeff, v.theta)
+        mgr.set(e, v1)
+      }
+    }
   }
 }

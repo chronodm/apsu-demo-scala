@@ -21,36 +21,35 @@ class MovementSystem(mgr: EntityManager) extends System {
 
     val world: Option[(Entity, World)] = mgr.all[World].headOption
 
-    mgr.all[Velocity].foreach({
-      case (e, v) =>
-        mgr.get[Position](e) foreach { p0 =>
-          val deltaSeconds = deltaMicros * secondsPerMicro
-          val dx = deltaSeconds * v.x
-          val dy = deltaSeconds * v.y
+    for ((e, v) <- mgr.all[Velocity]) {
+      for (p0 <- mgr.get[Position](e)) {
+        val deltaSeconds = deltaMicros * secondsPerMicro
+        val dx = deltaSeconds * v.x
+        val dy = deltaSeconds * v.y
 
-          val newX: Float = p0.x + dx
-          val newY: Float = p0.y + dy
+        val newX: Float = p0.x + dx
+        val newY: Float = p0.y + dy
 
-          // wrap to world if present
-          val p1 = world match {
-            case Some((_, w)) =>
-              val x1 = wrapIfNeeded(newX, w.width)
-              val y1 = wrapIfNeeded(newY, w.height)
-              Position(x1, y1)
-            case _ => Position(newX, newY)
-          }
-
-          log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
-
-          val didWrap = p1.x != newX || p1.y != newY
-          mgr.get[DeleteAtEdge](e) match {
-            case Some(_) if didWrap =>
-              mgr.delete(e)
-            case _ =>
-              mgr.set(e, p1)
-          }
+        // wrap to world if present
+        val p1 = world match {
+          case Some((_, w)) =>
+            val x1 = wrapIfNeeded(newX, w.width)
+            val y1 = wrapIfNeeded(newY, w.height)
+            Position(x1, y1)
+          case _ => Position(newX, newY)
         }
-    })
+
+        log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
+
+        val didWrap = p1.x != newX || p1.y != newY
+        mgr.get[DeleteAtEdge](e) match {
+          case Some(_) if didWrap =>
+            mgr.delete(e)
+          case _ =>
+            mgr.set(e, p1)
+        }
+      }
+    }
   }
 
   private def wrapIfNeeded(n: Float, max: Float) = {
