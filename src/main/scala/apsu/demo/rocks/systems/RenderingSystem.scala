@@ -27,7 +27,7 @@ class RenderingSystem(mgr: EntityManager, paintHandler: PaintHandler) extends Sy
         //        val frameRate = Math.round(1e6 / lastDelta)
         //        g2.drawString(s"FPS: $frameRate", 0f, bounds.height)
 
-        for ((e, r) <- mgr.all[Renderable]) {
+        mgr.forAll[Renderable] { (e, r) =>
           val img = r.img
           for (p <- mgr.get[Position](e)) {
             val o = mgr.get[Orientation](e).getOrElse(Orientation(0))

@@ -23,7 +23,7 @@ class CommandSystem(mgr: EntityManager) extends System {
   override def nickname: String = "CommandSystem"
 
   override def processTick(deltaMicros: Long): Unit = {
-    for ((e, cq) <- mgr.all[CommandQueue]) {
+    mgr.forAll[CommandQueue] { (e, cq) =>
       for (c <- cq.commands) {
         log.trace(s"Invoking: $c")
         c match {

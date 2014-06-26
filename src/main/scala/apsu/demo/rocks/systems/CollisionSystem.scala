@@ -16,7 +16,7 @@ class CollisionSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Collision"
 
   override def processTick(deltaMicros: Long): Unit = {
-    for ((e, c) <- mgr.all[Collision]) {
+    mgr.forAll[Collision] { (e, c) =>
       log.trace(s"Found collision $c on $e")
 
       c match {

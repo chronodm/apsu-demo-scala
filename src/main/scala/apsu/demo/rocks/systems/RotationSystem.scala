@@ -16,7 +16,7 @@ class RotationSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Rotation"
 
   override def processTick(deltaMicros: Long): Unit = {
-    for ((e, w) <- mgr.all[AngularVelocity]) {
+    mgr.forAll[AngularVelocity] { (e, w) =>
       val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
       val deltaSeconds = deltaMicros * secondsPerMicro
       val dTheta = deltaSeconds * w.theta

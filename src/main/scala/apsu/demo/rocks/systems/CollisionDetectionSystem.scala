@@ -19,8 +19,8 @@ case class CollisionDetectionSystem(mgr: EntityManager) extends System {
 
   override def processTick(deltaMicros: Long): Unit = {
     // TODO find a way to do this that's not quadratic (better data?)
-    for ((e, c) <- mgr.all[Collideable]) {
-      for ((e1, c1) <- mgr.all[Collideable]) {
+    mgr.forAll[Collideable] { (e, c) =>
+      mgr.forAll[Collideable] { (e1, c1) =>
         if (e != e1 && c.collidesWith(c1)) {
           (mgr.get[Position](e), mgr.get[Position](e1), mgr.get[Renderable](e), mgr.get[Renderable](e1)) match {
             case (Some(p), Some(p1), Some(r), Some(r1)) =>

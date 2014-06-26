@@ -20,7 +20,7 @@ class DestructionSystem(mgr: EntityManager) extends System {
   override def nickname: String = "Destruction"
 
   override def processTick(deltaMicros: Long): Unit = {
-    for ((e, d) <- mgr.all[Destruction]) {
+    mgr.forAll[Destruction] { (e, d) =>
       // TODO this is awkward; these are exclusive. Separate systems?
       for (ps <- mgr.get[PlayerShip](e)) {
         // TODO this is a hack to remove the player ship without invalidating the exit command; we can do better

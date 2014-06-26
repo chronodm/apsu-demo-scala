@@ -21,7 +21,7 @@ class MovementSystem(mgr: EntityManager) extends System {
 
     val world: Option[(Entity, World)] = mgr.all[World].headOption
 
-    for ((e, v) <- mgr.all[Velocity]) {
+    mgr.forAll[Velocity] { (e, v) =>
       for (p0 <- mgr.get[Position](e)) {
         val deltaSeconds = deltaMicros * secondsPerMicro
         val dx = deltaSeconds * v.x
