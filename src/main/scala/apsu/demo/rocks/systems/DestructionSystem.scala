@@ -11,7 +11,7 @@ import apsu.demo.rocks.components.geometry.{Velocity, Position}
  *
  * @author david
  */
-class DestructionSystem (mgr: EntityManager) extends System {
+class DestructionSystem(mgr: EntityManager) extends System {
 
   private val piOver2 = (Math.PI / 2).asInstanceOf[Float]
 
@@ -23,24 +23,18 @@ class DestructionSystem (mgr: EntityManager) extends System {
     mgr.all[Destruction].foreach {
       case (e, d) =>
         // TODO this is awkward; these are exclusive. Separate systems?
-        mgr.get[PlayerShip](e) match {
-          case Some(ps) =>
-            // TODO this is a hack to remove the player ship without invalidating the exit command; we can do better
-//            mgr.delete(e)
-//            mgr.set(e, ps)
-            // TODO lose life and/or game over
-          case _ => // TODO clean up all these "case _ =>" s
+        mgr.get[PlayerShip](e) foreach { ps =>
+          // TODO this is a hack to remove the player ship without invalidating the exit command; we can do better
+          //            mgr.delete(e)
+          //            mgr.set(e, ps)
+          // TODO lose life and/or game over
         }
-        mgr.get[Rock](e) match {
-          case Some(r) =>
-            split(e, r)
-            mgr.delete(e)
-          case _ => // TODO clean up all these "case _ =>" s
+        mgr.get[Rock](e) foreach { r =>
+          split(e, r)
+          mgr.delete(e)
         }
-        mgr.get[PlayerBullet](e) match {
-          case Some(pb) =>
-            mgr.delete(e)
-          case _ => // TODO clean up all these "case _ =>" s
+        mgr.get[PlayerBullet](e) foreach { pb =>
+          mgr.delete(e)
         }
         log.trace(s"Deleting $e due to $d")
         mgr.remove[Destruction](e)
@@ -48,16 +42,14 @@ class DestructionSystem (mgr: EntityManager) extends System {
   }
 
   private def split(e: Entity, r: Rock) {
-    r.childSize match {
-      case Some(r1) =>
-        (mgr.get[Velocity](e), mgr.get[Position](e)) match {
-          case (Some(v), Some(p)) =>
-            for (vTheta <- Seq(v.theta + piOver2, v.theta - piOver2)) {
-              r1.add(vTheta, p, vTheta > 0, mgr)
-            }
-          case _ => // TODO clean up all these "case _ =>" s
-        }
-      case _ => // TODO clean up all these "case _ =>" s
+    r.childSize foreach { r1 =>
+      (mgr.get[Velocity](e), mgr.get[Position](e)) match {
+        case (Some(v), Some(p)) =>
+          for (vTheta <- Seq(v.theta + piOver2, v.theta - piOver2)) {
+            r1.add(vTheta, p, vTheta > 0, mgr)
+          }
+        case _ => // TODO clean up all these "case _ =>" s
+      }
     }
   }
 }

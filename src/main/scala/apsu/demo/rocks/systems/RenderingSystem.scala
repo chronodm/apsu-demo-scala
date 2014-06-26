@@ -12,7 +12,8 @@ import apsu.demo.rocks.components.rendering.Renderable
  * RenderingSystem
  *
  * @author david
- */ // TODO make PaintHandler a component or something
+ */
+// TODO make PaintHandler a component or something
 class RenderingSystem(mgr: EntityManager, paintHandler: PaintHandler) extends System {
 
   private val log = Logger.getLogger(classOf[RenderingSystem])
@@ -23,28 +24,26 @@ class RenderingSystem(mgr: EntityManager, paintHandler: PaintHandler) extends Sy
 
     val painter = new Painter {
       override def paint(g2: Graphics2D, bounds: Rectangle): Unit = {
-//        val frameRate = Math.round(1e6 / lastDelta)
-//        g2.drawString(s"FPS: $frameRate", 0f, bounds.height)
+        //        val frameRate = Math.round(1e6 / lastDelta)
+        //        g2.drawString(s"FPS: $frameRate", 0f, bounds.height)
 
         mgr.all[Renderable].foreach({
           case (e, r) =>
             val img = r.img
-            mgr.get[Position](e) match {
-              case Some(p) =>
-                val o = mgr.get[Orientation](e).getOrElse(Orientation(0))
+            mgr.get[Position](e) foreach { p =>
+              val o = mgr.get[Orientation](e).getOrElse(Orientation(0))
 
-//                g2.drawString(s"(${Math.round(p.x)}, ${Math.round(p.y)})", p.x.asInstanceOf[Float], p.y.asInstanceOf[Float])
+              //                g2.drawString(s"(${Math.round(p.x)}, ${Math.round(p.y)})", p.x.asInstanceOf[Float], p.y.asInstanceOf[Float])
 
-                val tx = new AffineTransform()
-                tx.setToIdentity()
-                tx.translate(p.x - r.width * 0.5, p.y - r.height * 0.5)
-                tx.scale(r.scaleX, r.scaleY)
-                tx.rotate(o.theta, img.getWidth * 0.5, img.getHeight * 0.5)
+              val tx = new AffineTransform()
+              tx.setToIdentity()
+              tx.translate(p.x - r.width * 0.5, p.y - r.height * 0.5)
+              tx.scale(r.scaleX, r.scaleY)
+              tx.rotate(o.theta, img.getWidth * 0.5, img.getHeight * 0.5)
 
-                g2.drawImage(img, tx, null)
+              g2.drawImage(img, tx, null)
 
-                log.trace(s"Rendered ${mgr.getNickname(e).getOrElse("")} at $p with $o")
-              case _ => // TODO clean up all these "case _ =>" s
+              log.trace(s"Rendered ${mgr.getNickname(e).getOrElse("")} at $p with $o")
             }
         })
       }
