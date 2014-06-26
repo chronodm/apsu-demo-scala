@@ -17,8 +17,8 @@ class CommandSystem (mgr: EntityManager) extends System {
   private val log = Logger.getLogger(classOf[CommandSystem])
 
   private val vMax = 500
-  private val accIncrement: Double = 10
-  private val oIncrement = Math.PI / 24
+  private val accIncrement: Float = 10
+  private val oIncrement = (Math.PI / 24).asInstanceOf[Float]
 
   override def nickname: String = "CommandSystem"
 

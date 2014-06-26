@@ -13,6 +13,8 @@ import apsu.demo.rocks.components.geometry.{Orientation, AngularVelocity}
  */
 class RotationSystemSpec extends fixture.FlatSpec with Matchers {
 
+  val pi = Math.PI.asInstanceOf[Float]
+
   case class F(mgr: EntityManager, sys: RotationSystem)
 
   implicit val orientationEq = new OrientationEquality
@@ -30,25 +32,25 @@ class RotationSystemSpec extends fixture.FlatSpec with Matchers {
 
   "processTick" should "adjust orientation" in { f =>
     val e = f.mgr.newEntity()
-    val o = Orientation(Math.PI/2)
-    val w = AngularVelocity(Math.PI/4)
+    val o = Orientation(pi/2)
+    val w = AngularVelocity(pi/4)
     f.mgr.set(e, o)
     f.mgr.set(e, w)
 
     f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
 
-    f.mgr.get[Orientation](e).get should === (Orientation(3 * Math.PI / 4))
+    f.mgr.get[Orientation](e).get should === (Orientation(3 * pi / 4))
   }
 
   it should "take time delta into account" in { f =>
     val e = f.mgr.newEntity()
     val o = Orientation(0)
-    val w = AngularVelocity(-Math.PI/4)
+    val w = AngularVelocity(-pi/4)
     f.mgr.set(e, o)
     f.mgr.set(e, w)
 
     f.sys.processTick(TimeUnit.SECONDS.toMicros(3))
 
-    f.mgr.get[Orientation](e).get should === (Orientation(-3 * Math.PI / 4))
+    f.mgr.get[Orientation](e).get should === (Orientation(-3 * pi / 4))
   }
 }

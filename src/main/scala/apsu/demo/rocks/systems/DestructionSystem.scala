@@ -13,6 +13,8 @@ import apsu.demo.rocks.components.geometry.{Velocity, Position}
  */
 class DestructionSystem (mgr: EntityManager) extends System {
 
+  private val piOver2 = (Math.PI / 2).asInstanceOf[Float]
+
   private val log = Logger.getLogger(classOf[DestructionSystem])
 
   override def nickname: String = "Destruction"
@@ -50,7 +52,7 @@ class DestructionSystem (mgr: EntityManager) extends System {
       case Some(r1) =>
         (mgr.get[Velocity](e), mgr.get[Position](e)) match {
           case (Some(v), Some(p)) =>
-            for (vTheta <- Seq(v.theta + Math.PI / 2, v.theta - Math.PI / 2)) {
+            for (vTheta <- Seq(v.theta + piOver2, v.theta - piOver2)) {
               r1.add(vTheta, p, vTheta > 0, mgr)
             }
           case _ => // TODO clean up all these "case _ =>" s

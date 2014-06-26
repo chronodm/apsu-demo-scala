@@ -5,7 +5,7 @@ package apsu.demo.rocks.components.geometry
  *
  * @author david
  */
-case class Position(x: Double, y: Double) {
+case class Position(x: Float, y: Float) {
   override def toString: String = s"($x, $y)"
 
   def distanceTo(o: Position) = {

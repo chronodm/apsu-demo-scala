@@ -20,7 +20,7 @@ case class PlayerShip(player: Int) {
     mgr.set(shipEntity, PlayerShip.defaultPosition(w))
     mgr.set(shipEntity, PlayerShip.defaultOrientation)
     mgr.set(shipEntity, PlayerShip.renderable)
-    mgr.set(shipEntity, Friction(0.99))
+    mgr.set(shipEntity, Friction(0.99f))
     mgr.set(shipEntity, Collideable.playerShip)
   }
 

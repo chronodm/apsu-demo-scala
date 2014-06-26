@@ -70,7 +70,7 @@ class LevelSystem(mgr: EntityManager) extends System  {
     mgr.all[World].headOption match {
       case Some((_, w)) =>
         Rock.large.add(
-          r.nextDouble() * (2 * Math.PI),
+          (r.nextDouble() * (2 * Math.PI)).asInstanceOf[Float],
           Position(r.nextInt(w.width), r.nextInt(w.height)),
           r.nextBoolean(),
           mgr)

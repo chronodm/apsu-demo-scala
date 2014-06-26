@@ -23,36 +23,39 @@ class MovementSystem(mgr: EntityManager) extends System {
 
     mgr.all[Velocity].foreach({
       case (e, v) =>
-        val p0 = mgr.get[Position](e).getOrElse(Position(0, 0))
-        val deltaSeconds = deltaMicros * secondsPerMicro
-        val dx = deltaSeconds * v.x
-        val dy = deltaSeconds * v.y
+        mgr.get[Position](e) match {
+          case Some(p0) =>
+            val deltaSeconds = deltaMicros * secondsPerMicro
+            val dx = deltaSeconds * v.x
+            val dy = deltaSeconds * v.y
 
-        val newX: Double = p0.x + dx
-        val newY: Double = p0.y + dy
+            val newX: Float = p0.x + dx
+            val newY: Float = p0.y + dy
 
-        // wrap to world if present
-        val p1 = world match {
-          case Some((_, w)) =>
-            val x1 = wrapIfNeeded(newX, w.width)
-            val y1 = wrapIfNeeded(newY, w.height)
-            Position(x1, y1)
-          case _ => Position(newX, newY)
-        }
+            // wrap to world if present
+            val p1 = world match {
+              case Some((_, w)) =>
+                val x1 = wrapIfNeeded(newX, w.width)
+                val y1 = wrapIfNeeded(newY, w.height)
+                Position(x1, y1)
+              case _ => Position(newX, newY)
+            }
 
-        log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
+            log.trace(s"Moving ${mgr.getNickname(e).getOrElse("")} from $p0 to $p1 ($v)")
 
-        val didWrap = p1.x != newX || p1.y != newY
-        mgr.get[DeleteAtEdge](e) match {
-          case Some(_) if didWrap =>
-            mgr.delete(e)
-          case _ =>
-            mgr.set(e, p1)
+            val didWrap = p1.x != newX || p1.y != newY
+            mgr.get[DeleteAtEdge](e) match {
+              case Some(_) if didWrap =>
+                mgr.delete(e)
+              case _ =>
+                mgr.set(e, p1)
+            }
+          case _ => // TODO clean up all these "case _ =>" s
         }
     })
   }
 
-  private def wrapIfNeeded(n: Double, max: Double) = {
+  private def wrapIfNeeded(n: Float, max: Float) = {
     if (n > max) {
       n - max
     } else if (n < 0) {

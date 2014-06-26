@@ -6,7 +6,7 @@ package apsu.demo.rocks.components.geometry
  *
  * @author david
  */
-case class Velocity(x: Double, y: Double) {
+case class Velocity(x: Float, y: Float) {
 
   def +(that: Velocity): Velocity = {
     Velocity(x + that.x, y + that.y)
@@ -16,20 +16,20 @@ case class Velocity(x: Double, y: Double) {
     Velocity(x - that.x, y - that.y)
   }
 
-  def +(that: Double): Velocity = {
+  def +(that: Float): Velocity = {
     Velocity.fromPolar(magnitude + that, theta)
   }
 
-  def -(that: Double): Velocity = {
+  def -(that: Float): Velocity = {
     Velocity.fromPolar(magnitude - that, theta)
   }
 
-  lazy val magnitude: Double = {
-    Math.sqrt(x*x + y*y)
+  lazy val magnitude: Float = {
+    Math.sqrt(x*x + y*y).asInstanceOf[Float]
   }
 
-  lazy val theta: Double = {
-    Math.atan2(y, x)
+  lazy val theta: Float = {
+    Math.atan2(y, x).asInstanceOf[Float]
   }
 
   override def toString: String = s"<$x, $y>"
@@ -37,9 +37,11 @@ case class Velocity(x: Double, y: Double) {
 
 object Velocity {
 
-  def fromCartesian(x: Double, y: Double): Velocity = Velocity(x, y)
+  def apply(x: Double, y: Double): Velocity = Velocity(x.asInstanceOf[Float], y.asInstanceOf[Float])
 
-  def fromPolar(magnitude: Double, theta: Double): Velocity = {
+  def fromCartesian(x: Float, y: Float): Velocity = Velocity(x, y)
+
+  def fromPolar(magnitude: Float, theta: Float): Velocity = {
     val vX = Math.cos(theta) * magnitude
     val vY = Math.sin(theta) * magnitude
     Velocity(vX, vY)

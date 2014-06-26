@@ -5,4 +5,4 @@ package apsu.demo.rocks.components.geometry
  *
  * @author david
  */
-case class Friction(coeff: Double)
+case class Friction(coeff: Float)

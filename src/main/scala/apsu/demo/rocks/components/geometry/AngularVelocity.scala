@@ -5,4 +5,4 @@ package apsu.demo.rocks.components.geometry
  *
  * @author david
  */
-case class AngularVelocity(theta: Double)
+case class AngularVelocity(theta: Float)

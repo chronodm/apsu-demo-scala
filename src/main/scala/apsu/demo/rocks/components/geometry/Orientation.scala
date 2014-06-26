@@ -7,12 +7,12 @@ import org.apache.commons.math3.util.MathUtils
  *
  * @author david
  */
-class Orientation private(val theta: Double) {
-    def +(dTheta: Double): Orientation = {
+class Orientation private(val theta: Float) {
+    def +(dTheta: Float): Orientation = {
       Orientation.apply(theta + dTheta)
     }
 
-    def -(dTheta: Double): Orientation = {
+    def -(dTheta: Float): Orientation = {
       Orientation.apply(theta - dTheta)
     }
 
@@ -35,12 +35,16 @@ class Orientation private(val theta: Double) {
 }
 
 object Orientation {
-  def apply(t: Double): Orientation = {
+  def apply(t: Float): Orientation = {
     val theta = MathUtils.normalizeAngle(t, 0)
-    new Orientation(theta)
+    Orientation(theta)
   }
 
-  def unapply(a: Orientation): Option[Double] = {
+  def apply(t: Double): Orientation = {
+    new Orientation(t.asInstanceOf[Float])
+  }
+
+  def unapply(a: Orientation): Option[Float] = {
     Some(a.theta)
   }
 }

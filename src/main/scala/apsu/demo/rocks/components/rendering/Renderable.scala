@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage
  *
  * @author david
  */
-case class Renderable(width: Double, height: Double, imgResource: String) {
+case class Renderable(width: Float, height: Float, imgResource: String) {
   val img: BufferedImage = {
     val imgUrl = getClass.getResource(imgResource)
     ImageIO.read(imgUrl)

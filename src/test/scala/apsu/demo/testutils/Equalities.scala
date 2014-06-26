@@ -9,12 +9,12 @@ import apsu.demo.rocks.components.geometry.{Orientation, Position}
  * significant digits.
  * @param significantDigits The number of significant digits.
  */
-class DoubleEquality(significantDigits: Int) extends Equality[Double] {
+class FloatEquality(significantDigits: Int) extends Equality[Float] {
   private val mc = new MathContext(significantDigits)
 
-  override def areEqual(d1: Double, b: Any): Boolean = {
+  override def areEqual(d1: Float, b: Any): Boolean = {
     b match {
-      case d2: Double =>
+      case d2: Float =>
         val bd1 = BigDecimal(d1).round(mc)
         val bd2 = BigDecimal(d2).round(mc)
         bd1 == bd2
@@ -27,7 +27,7 @@ class DoubleEquality(significantDigits: Int) extends Equality[Double] {
  * Checks position equality in x and y to three significant digits.
  */
 class PositionEquality extends Equality[Position] {
-  private val de = new DoubleEquality(3)
+  private val de = new FloatEquality(3)
 
   override def areEqual(p1: Position, a: Any): Boolean = {
     a match {
@@ -42,7 +42,7 @@ class PositionEquality extends Equality[Position] {
  * Checks orientation angle equality to three significant digits.
  */
 class OrientationEquality extends Equality[Orientation] {
-  private val de = new DoubleEquality(3)
+  private val de = new FloatEquality(3)
 
   override def areEqual(o: Orientation, a: Any): Boolean = {
     a match {

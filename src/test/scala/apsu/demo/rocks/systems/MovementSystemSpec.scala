@@ -49,7 +49,7 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
     val delta = TimeUnit.SECONDS.toMicros(1) / 60L
     f.sys.processTick(delta)
 
-    val expected = Position(1 + 2 / 60.0, 1 + 3 / 60.0)
+    val expected = Position(1 + 2 / 60f, 1 + 3 / 60f)
     f.mgr.get[Position](e).get should === (expected)
   }
 
