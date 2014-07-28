@@ -1,6 +1,6 @@
 package apsu.demo.rocks.components
 
-import apsu.demo.rocks.util.{EnumLike, EnumRegistry}
+import apsu.util.{EnumRegistry, EnumLike}
 
 /**
  * GameState

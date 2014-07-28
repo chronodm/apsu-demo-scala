@@ -1,6 +1,6 @@
 package apsu.demo.rocks.components.collision
 
-import apsu.demo.rocks.util.{EnumRegistry, EnumLike}
+import apsu.util.{EnumRegistry, EnumLike}
 
 /**
  * Collideable

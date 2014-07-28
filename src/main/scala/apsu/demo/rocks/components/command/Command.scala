@@ -1,9 +1,9 @@
 package apsu.demo.rocks.components.command
 
-import apsu.demo.rocks.util.{EnumLike, EnumRegistry}
 import java.awt.event.KeyEvent
 import apsu.core.{Entity, EntityManager}
 import apsu.demo.rocks.components.geometry.{Orientation, Velocity}
+import apsu.util.{EnumRegistry, EnumLike}
 import org.apache.log4j.Logger
 
 /**

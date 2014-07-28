@@ -1,10 +1,10 @@
 package apsu.demo.rocks.components.sprites
 
-import apsu.demo.rocks.util.{EnumRegistry, EnumLike}
 import apsu.demo.rocks.components.rendering.{World, Renderable}
 import apsu.core.EntityManager
 import apsu.demo.rocks.components.geometry.{AngularVelocity, Velocity, Orientation, Position}
 import apsu.demo.rocks.components.collision.Collideable
+import apsu.util.{EnumRegistry, EnumLike}
 
 /**
  * RockSize
