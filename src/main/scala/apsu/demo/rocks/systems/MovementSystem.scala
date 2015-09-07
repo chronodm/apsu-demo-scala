@@ -54,9 +54,9 @@ class MovementSystem(mgr: EntityManager) extends System {
 
   private def wrapIfNeeded(n: Float, max: Float) = {
     if (n > max) {
-      n - max
+      n % max
     } else if (n < 0) {
-      n + max
+      (n % max) + max
     } else {
       n
     }

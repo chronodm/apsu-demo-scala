@@ -131,6 +131,19 @@ class MovementSystemSpec extends fixture.FlatSpec with Matchers {
   }
 
   it should "wrap values larger than screen height or width" in { f =>
-    fail("test not implemented")
+    val screenEntity = f.mgr.newEntity()
+    val screen = World(16, 9)
+    f.mgr.set(screenEntity, screen)
+
+    val mobEntity = f.mgr.newEntity()
+    val p = Position(1, 4)
+    val v = Velocity(0, 2 * screen.height + 2)
+    f.mgr.set(mobEntity, p)
+    f.mgr.set(mobEntity, v)
+
+    val expected = Position(1, 6)
+
+    f.sys.processTick(TimeUnit.SECONDS.toMicros(1))
+    f.mgr.get[Position](mobEntity).get should === (expected)
   }
 }
