@@ -16,15 +16,11 @@ class Orientation private(val theta: Float) {
       Orientation.apply(theta - dTheta)
     }
 
-
-  def canEqual(other: Any): Boolean = other.isInstanceOf[Orientation]
-
   override def toString: String = s"Orientation($theta)"
 
   override def equals(other: Any): Boolean = other match {
     case that: Orientation =>
-      (that canEqual this) &&
-        theta == that.theta
+      theta == that.theta
     case _ => false
   }
 

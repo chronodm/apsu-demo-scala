@@ -45,7 +45,7 @@ class CommandSystem(mgr: EntityManager) extends System {
 
   // TODO maybe Command shouldn't be a case class / enum and these should be encapsulated?
 
-  def accelerate(e: Entity) {
+  def accelerate(e: Entity): Unit = {
     val orientation = mgr.get[Orientation](e).getOrElse(Orientation(0))
     val v0 = mgr.get[Velocity](e).getOrElse(Velocity(0, 0))
     val deltaV = Velocity.fromPolar(accIncrement, orientation.theta)
@@ -61,19 +61,19 @@ class CommandSystem(mgr: EntityManager) extends System {
     mgr.set(e, vActual)
   }
 
-  def rotateCW(e: Entity) {
+  def rotateCW(e: Entity): Unit = {
     val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
     val o1 = o0 + oIncrement
     mgr.set(e, o1)
   }
 
-  def rotateCCW(e: Entity) {
+  def rotateCCW(e: Entity): Unit = {
     val o0 = mgr.get[Orientation](e).getOrElse(Orientation(0))
     val o1 = o0 - oIncrement
     mgr.set(e, o1)
   }
 
-  def fire(e: Entity) {
+  def fire(e: Entity): Unit = {
     val v0 = mgr.get[Velocity](e).getOrElse(Velocity(0, 0))
     val p0 = mgr.get[Position](e).getOrElse(Position(0, 0)) // TODO use ship default position
     val o0 = mgr.get[Orientation](e).getOrElse(PlayerShip.defaultOrientation)

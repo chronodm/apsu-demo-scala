@@ -38,7 +38,7 @@ case class Rock private(name: String) extends EnumLike[Rock] {
   lazy val spin = Rock.spins(this)
   lazy val childSize = Rock.childSizes.get(this)
 
-  def add(vTheta: Float, position: Position, clockwise: Boolean, mgr: EntityManager) {
+  def add(vTheta: Float, position: Position, clockwise: Boolean, mgr: EntityManager): Unit = {
     val rock = mgr.newEntity()
     mgr.setNickname(rock, s"Rock ${rock.id.toString}")
     mgr.set(rock, this)

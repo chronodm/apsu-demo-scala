@@ -40,7 +40,7 @@ class DestructionSystem(mgr: EntityManager) extends System {
     }
   }
 
-  private def split(e: Entity, r: Rock) {
+  private def split(e: Entity, r: Rock): Unit = {
     for (r1 <- r.childSize) {
       (mgr.get[Velocity](e), mgr.get[Position](e)) match {
         case (Some(v), Some(p)) =>

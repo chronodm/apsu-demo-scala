@@ -27,12 +27,12 @@ class KeyboardInputSystem(mgr: EntityManager) extends System with KeyEventDispat
     val pending = queue
     queue = empty
 
-    if (!pending.isEmpty) log.trace(s"Found ${pending.size} pending key events in queue")
+    if (pending.nonEmpty) log.trace(s"Found ${pending.size} pending key events in queue")
 
     // TODO separate player and ship
     val commands = (for (e <- pending) yield Command(e)).flatten
     mgr.forAll[PlayerShip] { (e, s) =>
-      if (!commands.isEmpty) log.trace(s"Enqueuing ${commands.size} commands")
+      if (commands.nonEmpty) log.trace(s"Enqueuing ${commands.size} commands")
       mgr.get[CommandQueue](e) match {
         case Some(cq0) =>
           mgr.set(e, cq0 + commands)

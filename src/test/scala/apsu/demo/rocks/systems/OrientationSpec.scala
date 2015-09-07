@@ -67,6 +67,12 @@ class OrientationSpec extends FlatSpec with Matchers {
     (o0 equals o1) should be(true)
   }
 
+  it should "return false for objects of the wrong type" in {
+    val o = Orientation(0)
+    val x: Any = Some(0)
+    (o equals x) should be(false)
+  }
+
   "==" should "return true for identical objects" in {
     val o0 = Orientation(piOver3)
     (o0 == o0) should be(true)
@@ -91,4 +97,9 @@ class OrientationSpec extends FlatSpec with Matchers {
     (o0 == o1) should be(true)
   }
 
+  it should "return false for objects of the wrong type" in {
+    val o = Orientation(0)
+    val x: Any = Some(0)
+    (o == x) should be(false)
+  }
 }

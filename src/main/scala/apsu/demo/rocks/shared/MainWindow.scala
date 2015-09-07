@@ -28,7 +28,7 @@ class MainWindow(fullscreen: Boolean) extends PaintHandler {
   // ----------------------------------------
   // Public methods
 
-  def show() {
+  def show(): Unit = {
     if (fullscreen) {
       val env = GraphicsEnvironment.getLocalGraphicsEnvironment
       val dev = env.getDefaultScreenDevice

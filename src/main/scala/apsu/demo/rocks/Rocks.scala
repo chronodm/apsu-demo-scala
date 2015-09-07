@@ -69,7 +69,7 @@ class Rocks(mainWindow: MainWindow) {
   // ------------------------------------------------------
   // Methods
 
-  def stop() {
+  def stop(): Unit = {
     stopped = true
   }
 
@@ -77,18 +77,18 @@ class Rocks(mainWindow: MainWindow) {
     !stopped
   }
 
-  def update(deltaMicros: Long) {
+  def update(deltaMicros: Long): Unit = {
     for (system <- systems) {
       system.processTick(deltaMicros)
     }
   }
 
-  def render(lastDelta: Long) {
+  def render(lastDelta: Long): Unit = {
     log.trace(s"render() at ${System.nanoTime()}")
     renderingSystem.processTick(lastDelta)
   }
 
-  def start() {
+  def start(): Unit = {
     stopped = false
 
     var lastUpdate = System.nanoTime()
@@ -124,7 +124,7 @@ class Rocks(mainWindow: MainWindow) {
 object Rocks {
   private val log = Logger.getLogger(classOf[Rocks])
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
 
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler {
       override def uncaughtException(t: Thread, e: Throwable): Unit = {
