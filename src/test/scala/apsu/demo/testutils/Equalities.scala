@@ -1,6 +1,6 @@
 package apsu.demo.testutils
 
-import org.scalautils.Equality
+import org.scalactic.Equality
 import java.math.MathContext
 import apsu.demo.rocks.components.geometry.{Orientation, Position}
 
@@ -12,11 +12,11 @@ import apsu.demo.rocks.components.geometry.{Orientation, Position}
 class FloatEquality(significantDigits: Int) extends Equality[Float] {
   private val mc = new MathContext(significantDigits)
 
-  override def areEqual(d1: Float, b: Any): Boolean = {
+  override def areEqual(f1: Float, b: Any): Boolean = {
     b match {
-      case d2: Float =>
-        val bd1 = BigDecimal(d1).round(mc)
-        val bd2 = BigDecimal(d2).round(mc)
+      case f2: Float =>
+        val bd1 = BigDecimal(f1.toDouble).round(mc)
+        val bd2 = BigDecimal(f2.toDouble).round(mc)
         bd1 == bd2
       case _ => false
     }
