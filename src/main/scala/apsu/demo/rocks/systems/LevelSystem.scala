@@ -39,7 +39,7 @@ class LevelSystem(mgr: EntityManager) extends System  {
   override def nickname: String = "Level"
 
   override def processTick(deltaMicros: Long): Unit = {
-    mgr.all[GameState].headOption match {
+    mgr.first[GameState] match {
       case Some((state, GameState.init)) =>
         initPlayerShip()
         initRocks()
@@ -51,23 +51,23 @@ class LevelSystem(mgr: EntityManager) extends System  {
   // ------------------------------------------------------
   // Methods
 
-  def initPlayerShip() {
-    mgr.all[World].headOption match {
+  def initPlayerShip(): Unit = {
+    mgr.first[World] match {
       case Some((_, w)) =>
         PlayerShip(1).add(mgr, w) // always player 1
       case _ => // TODO clean up all these "case _ =>" s
     }
   }
 
-  def initRocks() {
+  def initRocks(): Unit = {
     for (i <- 0 until numRocks) {
       addRock()
     }
   }
 
-  def addRock() {
+  def addRock(): Unit = {
     // TODO avoid player ship collisions on startup
-    mgr.all[World].headOption match {
+    mgr.first[World] match {
       case Some((_, w)) =>
         Rock.large.add(
           (r.nextDouble() * (2 * Math.PI)).asInstanceOf[Float],
