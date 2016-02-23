@@ -17,8 +17,8 @@ class CommandSystem(mgr: EntityManager) extends System {
   private val log = Logger.getLogger(classOf[CommandSystem])
 
   private val vMax = 500
-  private val accIncrement: Float = 10
-  private val oIncrement = (Math.PI / 24).asInstanceOf[Float]
+  private val accIncrement: Float = 20
+  private val oIncrement = (Math.PI / 16).asInstanceOf[Float]
 
   override def nickname: String = "CommandSystem"
 
@@ -56,7 +56,7 @@ class CommandSystem(mgr: EntityManager) extends System {
       Velocity.fromPolar(Math.copySign(vMax, v1.magnitude), v1.theta)
     }
 
-    log.trace(s"accelerate($e): $v0 + $deltaV = $v1 (-> $vActual)")
+    log.debug(s"accelerate($e): $v0 + $deltaV = $v1 (-> $vActual)")
 
     mgr.set(e, vActual)
   }

@@ -20,7 +20,7 @@ class Rocks(mainWindow: MainWindow) {
   // ------------------------------------------------------
   // Constants
 
-  val updatesPerSecond = 60
+  val updatesPerSecond = 90
   val skipNanos = TimeUnit.SECONDS.toNanos(1) / updatesPerSecond
   val maxFrameskip = 10
 

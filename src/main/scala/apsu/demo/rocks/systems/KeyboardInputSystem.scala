@@ -42,6 +42,7 @@ class KeyboardInputSystem(mgr: EntityManager) extends System with KeyEventDispat
     }
   }
 
+  // TODO detect key down, not just press (so we don't depend on keyboard repeat)
   // TODO support n-key rollover
   override def dispatchKeyEvent(e: KeyEvent): Boolean = {
     log.trace(s"dispatchKeyEvent($e)")
