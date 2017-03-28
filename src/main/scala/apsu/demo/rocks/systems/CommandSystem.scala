@@ -37,6 +37,8 @@ class CommandSystem(mgr: EntityManager) extends System {
             fire(e)
           case Command.exit =>
             java.lang.System.exit(0)
+          case _ =>
+            throw new IllegalArgumentException(s"Unexpected command $c")
         }
       }
       mgr.remove[CommandQueue](e)

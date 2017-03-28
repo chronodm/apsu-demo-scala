@@ -20,6 +20,8 @@ object Collideable {
         c1 == rock
       case Collideable.playerBullet =>
         c1 == rock
+      case _ =>
+        throw new IllegalArgumentException(s"Unexpected collideable type $c0")
     }
   }
 }
