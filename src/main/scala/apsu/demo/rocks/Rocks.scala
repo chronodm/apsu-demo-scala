@@ -21,7 +21,8 @@ class Rocks(mainWindow: MainWindow) {
   // Constants
 
   val updatesPerSecond = 90
-  val skipNanos = TimeUnit.SECONDS.toNanos(1) / updatesPerSecond
+  val oneSecondNanos: Double = TimeUnit.SECONDS.toNanos(1)
+  val skipNanos: Long = (oneSecondNanos / updatesPerSecond).asInstanceOf[Long]
   val maxFrameskip = 10
 
   // ------------------------------------------------------
@@ -98,6 +99,8 @@ class Rocks(mainWindow: MainWindow) {
 
     var lastDelta = 0L
 
+    var frameCount = 0L
+
     while (running) {
       var loops = 0
       while (System.nanoTime() > nextUpdate && loops < maxFrameskip) {
@@ -114,10 +117,15 @@ class Rocks(mainWindow: MainWindow) {
       // TODO interpolation
       render(lastDelta)
 
+      frameCount += 1L
       val now = System.nanoTime()
-      log.trace(s"Rendered at $now (${TimeUnit.NANOSECONDS.toMillis(now - lastRender)} ms)")
+      log.debug(s"Rendered frame $frameCount at $now (${fps(now, lastRender)} fps)")
       lastRender = System.nanoTime()
     }
+  }
+
+  private def fps(now: Long, lastRender: Long): Double = {
+    oneSecondNanos / (now - lastRender)
   }
 }
 
